@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/utils.html" as utils %}
+
+{% block title %}Relatório de Ferramentas{% endblock %}
+
+
+{% block content %}
+
+<div class="content" id="conteudo">
+    <h3>Relatório da turma - {{turma}} </h3>
+
+    <br><br>
+    
+    {% if listaresultados|length < 1 %}
+    <h5> {{mensagem}}</h5>
+    {% else %}
+
+
+    <table id="alunos-turma" class="table table-bordered table-condensed table-hover">
+        <thead>
+            <tr class="active">
+                <th>Matrícula</th>
+                <th>Nome</th>
+                <th>Grupo</th>
+                {% for trabalho in listatrabalhos %}   
+                <th>{{ trabalho }} Nota</th>
+                <th>{{ trabalho }} Jplag</th>
+                <th>{{ trabalho }} Moss</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for elemento in listaresultados %}
+            <tr> 
+                <th><a href="/relatorioaluno?matricula_aluno={{elemento.matricula}}&turma={{turma}}">{{ elemento.matricula }}</a></th>
+                <th>{{ elemento.nome_aluno }}</th>
+                <th>{{ elemento.grupo }}</th>
+                {% for i in range(tamanholistatrabalhos) %}    
+                <th>{{ elemento.notas_trabalhos[i] }}</th>
+                <th>{{ elemento.similaridade_jplag[i] }}</th>
+                <th>{{ elemento.similaridade_moss[i] }}</th>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}    
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#alunos-turma').DataTable();
+    });
+
+
+</script>
+
+
+{% endblock %}

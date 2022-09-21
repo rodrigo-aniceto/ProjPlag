@@ -1,0 +1,8 @@
+src/.env
+src/temp
+src/__pycache__
+src/alunos-teste
+src/testeAsinc.py
+codigosAlunos/*
+input/*
+logsferramentas/*

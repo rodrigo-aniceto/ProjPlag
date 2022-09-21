@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/utils.html" as utils %}
+
+{% block title %}Tela Inicial{% endblock %}
+
+
+{% block content %}
+
+<div class="content" id="conteudo">
+    <h3>Tela Inicial </h3>
+
+    {% if listaturmas|length < 1 %}
+    <h4> Nenhuma turma cadastrada</h4>
+    {% else %}
+
+
+    <br><br>
+    <table class="table">
+        <tr>
+            <th>Turma</th>
+            <th>Projetos</th>
+            <th>Ação</th>
+        </tr>
+        {% for turma in listaturmas %}
+
+        <tr>
+            <td> <a href="/relatorioturma?turma={{turma.nome}}">{{ turma.nome }} </a></td>
+            <td> {{ turma.projetos }} </td>
+            <td> apagar </td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+    {% endif %}
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+
+{% endblock %}

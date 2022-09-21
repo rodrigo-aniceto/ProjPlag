@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/utils.html" as utils %}
+
+{% block title %}Relatório de Projeto{% endblock %}
+
+{% block content %}
+
+<div class="content" id="conteudo">
+    <h3>Relatório do Trabalho </h3>
+    <h5>{{nomeprojeto}} - {{turma}}</h5>
+
+    <br><br>
+    
+    {% if listaalunos|length < 1 %}
+    <h5> {{mensagem}}</h5>
+    {% else %}
+
+    <button type="button" class="btn btn-secondary" onclick="executarMoss();">Executar Moss</button>
+    <button type="button" class="btn btn-secondary" onclick="verificarMoss();">Verificar Moss</button>
+    <span id="rmoss"></span><br><br>
+
+
+    <button type="button" class="btn btn-secondary" onclick="executarJplag();">Executar JPlag</button>
+    <button type="button" class="btn btn-secondary" onclick="verificarJplag();">Verificar Jplag</button>
+    <span id="rjplag"></span><br><br>
+
+    <button type="button" class="btn btn-secondary" onclick="window.location.href='/relatorioferramentas?turma={{turma}}&nomeprojeto={{nomeprojeto}}';">Detalhes</button>
+    <br><br>
+
+    <!--Usar contextual class pra marcar os perfis de aluno-->
+    <table id="alunos-turma" class="table table-bordered table-condensed table-hover">
+        <thead>
+            <tr class="active">
+                <th class="col-dir">Matrícula </th>
+                <th class="col-dir">Nome</th>
+                <th class="col-dir">Grupo</th>
+                <th class="col-dir">Tempo Utilizado</th>
+                <th class="col-dir">Prazo Restante</th>
+                <th class="col-dir">Nota</th>
+                <th class="col-dir">Resultado Moss</th>
+                <th class="col-dir">Resultado Jplag</th>
+                <th class="col-dir">Código Fonte</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for elemento in listaalunos %}
+
+            <tr>
+                <th><a href="/relatorioaluno?matricula_aluno={{elemento.matricula}}&turma={{turma}}">{{ elemento.matricula }}</a></th>
+                <th>{{ elemento.nome }}</th>
+                <th>{{ elemento.grupo }}</th>
+                <th>{{ elemento.tempo_gasto }}</th>
+                <th>{{ elemento.prazo_restante }}</th>
+                {% if (elemento.nota != None) %} <th> {{ elemento.nota }}</th> {% else %} <th>-</th> {% endif %} 
+                <th>{{ elemento.moss }}%</th>
+                <th>{{ elemento.jplag }}%</th>
+                {% if elemento.existe_codigo %} <th><a href="/codigofonte?nomeprojeto={{nomeprojeto}}&turma={{turma}}&arquivo={{elemento.matricula+".py"}}">{{ elemento.matricula+".py" }}</a></th>{% else %}<th>-</th>{% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}    
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#alunos-turma').DataTable();
+    });
+
+
+    function executarMoss(){
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/runmoss?nomeprojeto={{nomeprojeto}}&turma={{turma}}", true);
+        //xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send();
+
+/*      var form = document.createElement('form');
+        form.setAttribute('method', 'post');
+        form.setAttribute('action', 'google.com');
+        form.style.display = 'hidden';
+        document.body.appendChild(form)
+        form.submit();*/
+    }
+
+
+    function verificarMoss(){
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/vermoss?nomeprojeto={{nomeprojeto}}&turma={{turma}}", true);
+        xhr.send();
+        xhr.onreadystatechange = function(){
+            if (this.status == 200){
+                document.getElementById("rmoss").innerHTML = xhr.responseText;
+            }
+        }
+        
+    }
+
+    function executarJplag(){
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/runjplag?nomeprojeto={{nomeprojeto}}&turma={{turma}}", true);
+        //xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send();
+    }
+
+    function verificarJplag(){
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/verjplag?nomeprojeto={{nomeprojeto}}&turma={{turma}}", true);
+        xhr.send();
+        xhr.onreadystatechange = function(){
+            if (this.status == 200){
+                document.getElementById("rjplag").innerHTML = xhr.responseText;
+            }
+        }
+        
+    }
+
+</script>
+
+
+{% endblock %}
