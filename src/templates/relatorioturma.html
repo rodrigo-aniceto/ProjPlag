@@ -16,6 +16,14 @@
     <h5> {{mensagem}}</h5>
     {% else %}
 
+    {% if listatrabalhos|length > 1 %}
+    <span>Clique para ver mais detalhes dos trabalhos:</span><br><br>
+    {% for trabalho in listatrabalhos %}
+    <button type="button" class="btn btn-secondary" onclick="window.location.href='/relatoriotrabalho?turma={{turma}}&nomeprojeto={{trabalho}}';">{{ trabalho }}</button>
+    {% endfor %}
+    <br><br>
+    {% endif %}
+    
 
     <table id="alunos-turma" class="table table-bordered table-condensed table-hover">
         <thead>
@@ -25,8 +33,8 @@
                 <th>Grupo</th>
                 {% for trabalho in listatrabalhos %}   
                 <th>{{ trabalho }} Nota</th>
-                <th>{{ trabalho }} Jplag</th>
-                <th>{{ trabalho }} Moss</th>
+                <!--<th>{{ trabalho }} Jplag</th>
+                <th>{{ trabalho }} Moss</th> -->
                 {% endfor %}
             </tr>
         </thead>
@@ -38,8 +46,8 @@
                 <th>{{ elemento.grupo }}</th>
                 {% for i in range(tamanholistatrabalhos) %}    
                 <th>{{ elemento.notas_trabalhos[i] }}</th>
-                <th>{{ elemento.similaridade_jplag[i] }}</th>
-                <th>{{ elemento.similaridade_moss[i] }}</th>
+                <!--<th>{{ elemento.similaridade_jplag[i] }}</th>
+                <th>{{ elemento.similaridade_moss[i] }}</th> -->
                 {% endfor %}
             </tr>
             {% endfor %}
