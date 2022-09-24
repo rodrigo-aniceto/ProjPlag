@@ -16,7 +16,7 @@
     <h5> {{mensagem}}</h5>
     {% else %}
 
-    {% if listatrabalhos|length > 1 %}
+    {% if listatrabalhos|length > 0 %}
     <span>Clique para ver mais detalhes dos trabalhos:</span><br><br>
     {% for trabalho in listatrabalhos %}
     <button type="button" class="btn btn-secondary" onclick="window.location.href='/relatoriotrabalho?turma={{turma}}&nomeprojeto={{trabalho}}';">{{ trabalho }}</button>

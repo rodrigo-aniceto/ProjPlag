@@ -6,6 +6,7 @@ import arquivos
 
 from random import randrange
 from random import randint
+from datetime import datetime
 
 """
 pra construir o BD:
@@ -58,13 +59,23 @@ class Similaridades(db.Model):
     def __repr__(self):
         return self.percentual
 
+class RegistrosFerramentas(db.Model):
+    __tablename__ = "registrosferramentas"
+    id = db.Column(db.Integer, primary_key=True)
+    nome_trabalho = db.Column(db.String(10), nullable=False)
+    turma = db.Column(db.String(15), nullable=False)
+    ferramenta = db.Column(db.String(10), nullable=False)
+    data_execucao = db.Column(db.DateTime, default=datetime.now())
 
+    def __repr__(self):
+        return str(self.id)
 
 
 # usar para criar o banco
 #db.drop_all()
-#db.create_all()
-#db.session.commit()
+db.create_all()
+db.session.commit()
+
 
 def inserir_novo_aluno(nome, matricula, turma, grupo):
     aluno = Alunos.query.filter_by(nome=nome, matricula=matricula, turma=turma).first()
@@ -78,6 +89,8 @@ def inserir_novo_aluno(nome, matricula, turma, grupo):
         db.session.commit()
     except:
         return 1
+    finally:
+        db.session.close()
 
     return 0
 
@@ -95,6 +108,8 @@ def inserir_nova_nota(matricula, nota, turma, nome_trabalho, tempo_gasto, prazo_
                 db.session.commit()
             except:
                 return 1
+            finally:
+                db.session.close()
         #adicionar nova
         else:
             nova_nota = Notas(nome_trabalho=nome_trabalho, nota=nota, id_aluno=aluno.id, tempo_gasto=tempo_gasto, prazo_restante=str(prazo_restante))
@@ -103,6 +118,8 @@ def inserir_nova_nota(matricula, nota, turma, nome_trabalho, tempo_gasto, prazo_
                 db.session.commit()
             except:
                 return 1
+            finally:
+                db.session.close()
 
         return 0
     return 1
@@ -145,6 +162,8 @@ def listar_alunos_trabalho(nome_turma, nome_projeto):
             aluno.moss = 0
         
         aluno.existe_codigo = arquivos.existeArquivoTrabalho(nome_projeto, nome_turma, aluno.matricula+".py")
+    
+    db.session.close()
     return lista_alunos
 
 
@@ -208,6 +227,7 @@ def listar_resultados_ferramentas(nome_turma, nome_projeto):
             aux.nota2 = Notas.query.filter_by(id_aluno=alunoB.id,nome_trabalho=nome_projeto).first()
             lista_resultado.append(aux)
     
+    db.session.close()
     return lista_resultado
         
 
@@ -234,9 +254,19 @@ def listarTurmas():
         aux.projetos = len(trabs)
         lista_resultado.append(aux)
     
+    db.session.close()
     return lista_resultado
 
 def apagarResultadosFerramenta(nomeTrabalho, nomeTurma, ferramenta):
+
+    registro_ferramenta = RegistrosFerramentas.query.filter_by(nome_trabalho=nomeTrabalho,turma=nomeTurma, ferramenta=ferramenta).first()
+    if registro_ferramenta != None:
+        try:
+            db.session.delete(registro_ferramenta)
+            db.session.commit()
+        except:
+            print ("erro deletar banco de dados - registro ferramenta")
+        
 
     lista_similaridades = Similaridades.query.filter_by(turma=nomeTurma,nome_trabalho=nomeTrabalho,ferramenta=ferramenta).all()
     try:
@@ -244,19 +274,14 @@ def apagarResultadosFerramenta(nomeTrabalho, nomeTurma, ferramenta):
             db.session.delete(similaridade)
         db.session.commit()
     except:
-        return "Erro deletar banco de dados"
+        print ("Erro deletar banco de dados - lista similaridade")
 
 
 def apagarTrabalhoTurma(nomeTrabalho, nomeTurma):
 
-    #apagar na tabela similaridade
-    similaridades_apagar = Similaridades.query.filter_by(turma=nomeTurma,nome_trabalho=nomeTrabalho).all()
-    try:
-        for similaridade in similaridades_apagar:
-            db.session.delete(similaridade)
-        db.session.commit()
-    except:
-        return "Erro deletar banco de dados - similaridades"
+    #apagar na tabela similaridade e registros
+    apagarResultadosFerramenta(nomeTrabalho,nomeTurma,"jplag")
+    apagarResultadosFerramenta(nomeTrabalho,nomeTurma,"moss")
     
     #apagar em notas, necessario identificar ids dos alunos primeiro
     lista_alunos = Alunos.query.filter_by(turma=nomeTurma).all()
@@ -267,7 +292,9 @@ def apagarTrabalhoTurma(nomeTrabalho, nomeTurma):
                 db.session.delete(nota)
             db.session.commit()
         except:
-            return "Erro deletar banco de dados - notas"
+            print ("Erro deletar banco de dados - notas")
+        finally:
+            db.session.close()
 
 def listar_resultados_ferramentas_antigo(nome_turma, nome_projeto):
 
@@ -340,6 +367,7 @@ def listar_resultados_ferramentas_antigo(nome_turma, nome_projeto):
 
         lista_resultado.append(aux)
 
+    db.session.close()
     return lista_resultado
 
 
@@ -388,6 +416,7 @@ def listarDadosGrafoFerramentas(nome_turma, nome_projeto, ferramenta, percentual
                 aux.matricula1 = alunoA.matricula
                 aux.matricula2 = alunoB.matricula
                 lista_resultado.append(aux)
+    db.session.close()
     return lista_resultado
 
 
@@ -409,7 +438,9 @@ def insereResultadosBanco(resultados, nomeTrabalho, nomeTurma, ferramenta):
                 db.session.add(nova_similaridade)
                 db.session.commit()
             except:
-                return 1
+                print ("Erro inserção BD - nova similaridade")
+            finally:
+                db.session.close()
     
 
 #aqui ficara o relatório geral de alunos
@@ -418,6 +449,7 @@ def buscaRelatorioAluno(matricula, turma):
     aluno = Alunos.query.filter_by(turma=turma, matricula=matricula).first()
 
     lista_notas = Notas.query.filter_by(id_aluno=aluno.id).order_by(Notas.nome_trabalho).all()
+    db.session.close()
 
 
 def gera_relatorio_geral(turma):
@@ -458,42 +490,29 @@ def gera_relatorio_geral(turma):
                     aux.similaridade_jplag[-1] = similaridade.percentual
         lista_resultado.append(aux)
 
+    db.session.close()
     return lista_resultado
 
 
+def insereRegistroFerrameta(nomeTrabalho, nomeTurma, ferramenta):
+    registro_ferramenta = RegistrosFerramentas.query.filter_by(nome_trabalho=nomeTrabalho,turma=nomeTurma, ferramenta=ferramenta).first()
+    if registro_ferramenta != None:
+        registro_ferramenta.data_execucao = datetime.now()
+        try:
+            db.session.commit()
+        except:
+            print ("Erro atualização BD - registro ferramentas")
+    else:
+        novo_registro = RegistrosFerramentas(nome_trabalho=nomeTrabalho,turma=nomeTurma,ferramenta=ferramenta)
+        try:
+            db.session.add(novo_registro)
+            db.session.commit()
+        except:
+            print ("Erro inserção BD - registro ferramentas")
+    db.session.close()
 
-"""
+def buscaRegistroFerramenta(nomeTrabalho, nomeTurma, ferramenta):
+    registro_ferramenta = RegistrosFerramentas.query.filter_by(nome_trabalho=nomeTrabalho,turma=nomeTurma, ferramenta=ferramenta).first()
+    db.session.close()
+    return registro_ferramenta
 
-criar tabela pra armazenar quais execuções de plágio já foram para o banco pra evitar ficar sobrecarregando a tabela de similaridades
-no momento eu só armazeno uma similaridade por aluno, mas precisa de mais para as outras telas
-novo modelo:
-
-tabela aluno
-    id integer,
-    matricula varchar(12)
-    nome varchar(50)
-    turma varchar(15)
-    ...
-
-
-tabela notas
-    id
-    nome_trabalho varchar(10)
-    nota varchar(5)
-
-tabela similaridades moss
-    id
-    id_aluno
-    nome_trabalho
-    ferramenta
-    maior_similaridade(percentual)
-    id_outro_aluno
-
-
-tabela dados moodle
-    a fazer...
-
-
-tabela plagios
-a principio fazendo com apenas a maior similaridade, se o professor quiser ver tudo, ele vai guardar os resultados
-"""

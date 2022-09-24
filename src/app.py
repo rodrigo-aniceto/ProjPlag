@@ -264,7 +264,6 @@ def runmoss():
     return "ok"
 
 
-#isso eh temporario
 @app.route("/vermoss")
 def verifica_moss():
 

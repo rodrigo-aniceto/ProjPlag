@@ -27,14 +27,14 @@ def executaMoss(nomeTrabalho, nomeTurma):
             listaResult = coletaDadosExecucaoMoss(ultima_linha)
             resultados = geraListaSimilaridade (listaResult)
             baseDados.insereResultadosBanco(resultados, nomeTrabalho, nomeTurma, "moss")
+            baseDados.insereRegistroFerrameta(nomeTrabalho,nomeTurma,"moss")
+            
+        arquivos.apagarArquivoMoss(nomeTrabalho, nomeTurma)
 
 def verificaExecucaoMoss(nomeTrabalho, nomeTurma):
 
-    # retorna 0 não executou
-    # retorna 1 execucao parcial
-    # retrona 2 com erro (timeout na conexão, moss não respondeu)
-    # retorna 3 execucao concluida
-
+    registro = baseDados.buscaRegistroFerramenta(nomeTrabalho, nomeTurma, "moss")
+    
     path = os.getcwd()+"/../logsferramentas/"
     lista_arquivos = os.listdir(path)
     for arquivo in lista_arquivos:
@@ -44,18 +44,20 @@ def verificaExecucaoMoss(nomeTrabalho, nomeTurma):
                 ultima_linha = arq.readlines()[-1]
             except:
                 arq.close()
-                return "1"
+                return "Executando moss..."
             else:
                 arq.close()
                 if ultima_linha.startswith("http"):
-                    # inserir isso no banco de dados, e retornar concluido
-                    return ultima_linha
+                    return "Concluindo execução..."
                 else:
-                    return "2"
+                    return "ERRO comunicação servidor"
 
-    # escrevo em banco de dados?
-    return "0" #moss nao executado
-
+    
+    if registro != None:
+        return "Última execução Moss: "+ registro.data_execucao.strftime("%d/%m/%Y, %H:%M:%S")
+    else:
+        return "Moss ainda não executado"
+    
 
 def apagaExecucaoMoss(nomeTrabalho, nomeTurma):
     if arquivos.existeTrabalhoTurma (nomeTrabalho, nomeTurma):
@@ -93,6 +95,31 @@ def executaJplag(nomeTrabalho, nomeTurma):
         resultados = geraListaSimilaridade (listaResult)
         #insere no banco
         baseDados.insereResultadosBanco(resultados, nomeTrabalho, nomeTurma, "jplag")
+        baseDados.insereRegistroFerrameta(nomeTrabalho,nomeTurma,"jplag")
+        arquivos.apagarPastaJplag(nomeTrabalho, nomeTurma)
+
+
+
+
+def verificaExecucaoJplag(nomeTrabalho, nomeTurma):
+
+    registro = baseDados.buscaRegistroFerramenta(nomeTrabalho, nomeTurma, "jplag")
+    if registro != None:
+        return "Última execução Jplag: "+ registro.data_execucao.strftime("%d/%m/%Y, %H:%M:%S")
+    else:
+        return "Jplag ainda não executado"
+
+'''
+    #verificação manual desabilitada
+    path = os.getcwd()+"/../logsferramentas/jplag"
+    lista_arquivos = os.listdir(path)
+    for arquivo in lista_arquivos:
+        if arquivo == nomeTurma+"-"+nomeTrabalho:
+            #verificar inserção BD
+            return "3"
+
+    return "0" #jplag nao executado
+'''
 
 
 def geraListaSimilaridade (listaResult):
@@ -156,23 +183,6 @@ def geraListaSimilaridade (listaResult):
     """
 
     return listaResumida
-
-
-def verificaExecucaoJplag(nomeTrabalho, nomeTurma):
-
-    # retorna 0 não executou
-    # retorna 1 execucao parcial
-    # retrona 2 com erro (timeout na conexão, moss não respondeu)
-    # retorna 3 execucao concluida
-
-    path = os.getcwd()+"/../logsferramentas/jplag"
-    lista_arquivos = os.listdir(path)
-    for arquivo in lista_arquivos:
-        if arquivo == nomeTurma+"-"+nomeTrabalho:
-            #verificar inserção BD
-            return "3"
-
-    return "0" #jplag nao executado
 
 
 def coletaDadosExecucaoMoss (url):
