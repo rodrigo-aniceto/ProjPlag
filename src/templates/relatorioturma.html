@@ -28,11 +28,11 @@
     <table id="alunos-turma" class="table table-bordered table-condensed table-hover">
         <thead>
             <tr class="active">
-                <th>Matrícula</th>
-                <th>Nome</th>
-                <th>Grupo</th>
+                <th class="table-active">Matrícula</th>
+                <th class="table-active">Nome</th>
+                <th class="table-active">Grupo</th>
                 {% for trabalho in listatrabalhos %}   
-                <th>{{ trabalho }} Nota</th>
+                <th class="table-active">{{ trabalho }} Nota</th>
                 <!--<th>{{ trabalho }} Jplag</th>
                 <th>{{ trabalho }} Moss</th> -->
                 {% endfor %}
