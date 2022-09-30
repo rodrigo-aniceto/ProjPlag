@@ -216,7 +216,7 @@ def codigofonte():
 
     return "<pre><code>"+arquivos.lerCodigoTrabalho (arquivo, nomeprojeto, turma)+"</code></pre>"
 
-
+'''
 @app.route("/codigo")
 def codigo():
 
@@ -231,7 +231,7 @@ def codigo():
         resposta+="<pre><code>"+conteudo+"</code></pre>"
 
     return resposta
-
+'''
 
 
 @app.route("/runjplag")

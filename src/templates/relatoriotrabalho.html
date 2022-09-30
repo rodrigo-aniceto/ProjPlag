@@ -55,7 +55,7 @@
                 {% if (elemento.nota != None) %} <th> {{ elemento.nota }}</th> {% else %} <th>-</th> {% endif %} 
                 <th>{{ elemento.moss }}%</th>
                 <th>{{ elemento.jplag }}%</th>
-                {% if elemento.existe_codigo %} <th><a href="/codigofonte?nomeprojeto={{nomeprojeto}}&turma={{turma}}&arquivo={{elemento.matricula+".py"}}">{{ elemento.matricula+".py" }}</a></th>{% else %}<th>-</th>{% endif %}
+                {% if elemento.existe_codigo %} <th><a href="/codigofonte?nomeprojeto={{nomeprojeto}}&turma={{turma}}&arquivo={{elemento.matricula+".py"}}">{{ elemento.matricula+".py" }} ({{ elemento.numero_linhas}})</a></th>{% else %}<th>-</th>{% endif %}
             </tr>
             {% endfor %}
         </tbody>

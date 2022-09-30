@@ -162,6 +162,8 @@ def listar_alunos_trabalho(nome_turma, nome_projeto):
             aluno.moss = 0
         
         aluno.existe_codigo = arquivos.existeArquivoTrabalho(nome_projeto, nome_turma, aluno.matricula+".py")
+        if (aluno.existe_codigo):
+            aluno.numero_linhas = arquivos.contaLinhasCodigo(nome_projeto, nome_turma, aluno.matricula+".py")
     
     db.session.close()
     return lista_alunos

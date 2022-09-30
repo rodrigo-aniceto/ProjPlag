@@ -42,6 +42,8 @@ def existeArquivoTrabalho (nomeTrabalho, nomeTurma, nomeArquivo):
     return False
 
 
+
+
 # cria uma pasta referente a uma nova turma, sucesso: True, se já existir com esse nome: False
 # TODO validar as strings de entrada para não permitir caracteris que não podem ser usados em nome de pasta
 def criarTurma (nome):
@@ -141,6 +143,14 @@ def lerCodigoTrabalho (nomeArquivo, nomeTrabalho, nomeTurma):
     
     arq.close()
     return conteudo
+
+#retorna o numero de linhas de código de um trabalho
+def contaLinhasCodigo (nomeTrabalho, nomeTurma, nomeArquivo):
+    path = gerarPathTrabalhosTurma(nomeTurma)+nomeTrabalho+"/"
+    arq = open(path+nomeArquivo, 'r')
+    num = sum(1 for line in arq)
+    arq.close()
+    return num
 
 def escreveCodigoTrabalho(nomeArquivo, nomeTrabalho, nomeTurma, conteudo):
     if existeTrabalhoTurma (nomeTrabalho, nomeTurma) == False:
