@@ -47,7 +47,7 @@
             {% for elemento in listaalunos %}
 
             <tr>
-                <th><a href="/relatorioaluno?matricula_aluno={{elemento.matricula}}&turma={{turma}}">{{ elemento.matricula }}</a></th>
+                <th><a href="/relatorioaluno?matricula={{elemento.matricula}}&turma={{turma}}">{{ elemento.matricula }}</a></th>
                 <th>{{ elemento.nome }}</th>
                 <th>{{ elemento.grupo }}</th>
                 <th>{{ elemento.tempo_gasto }}</th>

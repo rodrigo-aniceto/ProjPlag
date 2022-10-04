@@ -41,7 +41,7 @@
         <tbody>
             {% for elemento in listaresultados %}
             <tr> 
-                <th><a href="/relatorioaluno?matricula_aluno={{elemento.matricula}}&turma={{turma}}">{{ elemento.matricula }}</a></th>
+                <th><a href="/relatorioaluno?matricula={{elemento.matricula}}&turma={{turma}}">{{ elemento.matricula }}</a></th>
                 <th>{{ elemento.nome_aluno }}</th>
                 <th>{{ elemento.grupo }}</th>
                 {% for i in range(tamanholistatrabalhos) %}    
