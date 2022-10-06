@@ -206,7 +206,8 @@ def relatorioaluno():
     matricula_aluno = request.args.get("matricula")
     turma = request.args.get("turma")
     resultado = baseDados.buscaRelatorioAluno(matricula_aluno, turma)
-    return str(resultado)
+    return render_template("relatorioaluno.html", resultados=resultado, matricula=matricula_aluno)
+
 
 @app.route("/codigofonte")
 def codigofonte():

@@ -445,65 +445,63 @@ def insereResultadosBanco(resultados, nomeTrabalho, nomeTurma, ferramenta):
                 db.session.close()
     
 
-#aqui ficara o relatório geral de alunos
 def buscaRelatorioAluno(matricula, turma):
-    result = ""
+    result = []
     aluno = Alunos.query.filter_by(turma=turma, matricula=matricula).first()
+    class elemento():
+        nome_trabalho = ""
+        nota = ""
+        tempo_gasto = ""
+        prazo_restante = ""
+        jplag = 0
+        moss = 0
+        existe_codigo = False
+        numero_linhas = 0
 
     if aluno != None:
         notas = Notas.query.filter_by(id_aluno=aluno.id).order_by(Notas.nome_trabalho).all()
-        for nota in notas:
-            result = result + " -- " + str(nota)
-    
+        for resultado_nota in notas:
+            elemento_result = elemento()
+
+            elemento_result.nome_trabalho = resultado_nota.nome_trabalho
+            elemento_result.nota = resultado_nota.nota
+            elemento_result.tempo_gasto = resultado_nota.tempo_gasto
+            
+            
+            if (resultado_nota.prazo_restante == '0'):
+                elemento_result.prazo_restante = "0 dias"
+            elif (resultado_nota.prazo_restante == '1'):
+                elemento_result.prazo_restante = "1 dia"
+            else:
+                elemento_result.prazo_restante = resultado_nota.prazo_restante + " dias"
+
+            lista_similaridade_jplag = Similaridades.query.filter_by(id_aluno=aluno.id,nome_trabalho=resultado_nota.nome_trabalho, ferramenta="jplag").all()
+            if lista_similaridade_jplag != None:
+                sim = 0
+                for similaridade in lista_similaridade_jplag:
+                    if int(similaridade.percentual) > sim:
+                        sim = int(similaridade.percentual)
+                elemento_result.jplag = sim
+            else:
+                elemento_result.jplag = 0
+
+            lista_similaridade_moss = Similaridades.query.filter_by(id_aluno=aluno.id,nome_trabalho=resultado_nota.nome_trabalho, ferramenta="moss").all()
+            if lista_similaridade_moss != None:
+                sim = 0
+                for similaridade in lista_similaridade_moss:
+                    if int(similaridade.percentual) > sim:
+                        sim = int(similaridade.percentual)
+                elemento_result.moss = sim
+            else:
+                elemento_result.moss = 0
+            
+            elemento_result.existe_codigo = arquivos.existeArquivoTrabalho(resultado_nota.nome_trabalho, turma, matricula+".py")
+            if (elemento_result.existe_codigo):
+                elemento_result.numero_linhas = arquivos.contaLinhasCodigo(resultado_nota.nome_trabalho, turma, matricula+".py")
+            result.append(elemento_result)
+
     db.session.close()
     return result
-
-
-'''
-def listar_alunos_trabalho(nome_turma, nome_projeto):
-    lista_alunos = Alunos.query.filter_by(turma=nome_turma).order_by(Alunos.matricula).all()
-
-    for aluno in lista_alunos:
-        resultado_nota = Notas.query.filter_by(id_aluno=aluno.id,nome_trabalho=nome_projeto).first()
-        if resultado_nota != None:
-            aluno.nota = resultado_nota.nota
-            aluno.tempo_gasto = resultado_nota.tempo_gasto
-            aluno.prazo_restante = resultado_nota.prazo_restante
-
-            if aluno.prazo_restante == '0':
-                aluno.prazo_restante = "0 dias"
-            elif aluno.prazo_restante == '1':
-                aluno.prazo_restante = "1 dia"
-            else:
-                aluno.prazo_restante = aluno.prazo_restante + " dias"
-            
-        lista_similaridade_jplag = Similaridades.query.filter_by(id_aluno=aluno.id,nome_trabalho=nome_projeto, ferramenta="jplag").all()
-        if lista_similaridade_jplag != None:
-            sim = 0
-            for similaridade in lista_similaridade_jplag:
-                if int(similaridade.percentual) > sim:
-                    sim = int(similaridade.percentual)
-            aluno.jplag = sim
-        else:
-            aluno.jplag = 0
-        
-        lista_similaridade_moss = Similaridades.query.filter_by(id_aluno=aluno.id,nome_trabalho=nome_projeto, ferramenta="moss").all()
-        if lista_similaridade_moss != None:
-            sim = 0
-            for similaridade in lista_similaridade_moss:
-                if int(similaridade.percentual) > sim:
-                    sim = int(similaridade.percentual)
-            aluno.moss = sim
-        else:
-            aluno.moss = 0
-        
-        aluno.existe_codigo = arquivos.existeArquivoTrabalho(nome_projeto, nome_turma, aluno.matricula+".py")
-        if (aluno.existe_codigo):
-            aluno.numero_linhas = arquivos.contaLinhasCodigo(nome_projeto, nome_turma, aluno.matricula+".py")
-    
-    db.session.close()
-    return lista_alunos'''
-
 
 
 def gera_relatorio_geral(turma):
