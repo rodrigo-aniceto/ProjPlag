@@ -7,17 +7,18 @@
 {% block content %}
 
 <div class="content" id="conteudo">
-    <h3>Relatório aluno - {{matricula}} </h3>
+    <h3>Relatório aluno</h3>
 
-    <br><br>
+    <br>
     {% if resultados|length < 1 %}
-    <h5> Sem dados aluno</h5>
+    <h5> Sem dados aluno {{ matricula }}</h5>
     {% else %}
-
+    <span>{{ nome }} - {{ matricula }}</span>
+    <br><br>
     {% for resultado in resultados %}
+    <h5>{{ resultado.nome_trabalho }}</h5>
     <table class="table">
         <tr>
-            <th>Nome Trabalho</th>
             <th>Nota</th>
             <th>Tempo Utilizado</th>
             <th>Prazo Restante</th>
@@ -27,7 +28,6 @@
         </tr>
 
         <tr>
-            <td> {{ resultado.nome_trabalho }}</td>
             <td> {{ resultado.nota }} </td>
             <td> {{ resultado.tempo_gasto }}</td>
             <td> {{ resultado.prazo_restante }}</td>
@@ -36,6 +36,7 @@
             {% if resultado.existe_codigo %} <th><a href="/codigofonte?nomeprojeto={{nomeprojeto}}&turma={{turma}}&arquivo={{matricula+".py"}}">{{ matricula+".py" }} ({{ resultado.numero_linhas}})</a></th>{% else %}<th>-</th>{% endif %}
         </tr>
     </table>
+    <br>
     {% endfor %}
     {% endif %}
 </div>

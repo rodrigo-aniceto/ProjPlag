@@ -81,6 +81,7 @@ def inserir_novo_aluno(nome, matricula, turma, grupo):
     aluno = Alunos.query.filter_by(nome=nome, matricula=matricula, turma=turma).first()
     if aluno != None:
         print("aluno já existe")
+        db.session.close()
         return 1
     
     novo_aluno = Alunos(nome=nome, matricula=matricula, turma=turma, grupo=grupo)
@@ -568,3 +569,11 @@ def buscaRegistroFerramenta(nomeTrabalho, nomeTurma, ferramenta):
     db.session.close()
     return registro_ferramenta
 
+def buscaNomeAluno(matricula, turma):
+    aluno = Alunos.query.filter_by(matricula=matricula, turma=turma).first()
+    if aluno != None:
+        db.session.close()
+        return aluno.nome    
+        
+    db.session.close()
+    return
