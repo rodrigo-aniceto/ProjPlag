@@ -402,7 +402,7 @@ def listarDadosGrafoFerramentas(nome_turma, nome_projeto, ferramenta, percentual
             alunoB = Alunos.query.filter_by(turma=nome_turma, matricula=similaridade.matricula_outro_aluno).first()
             jaExiste = False
             for resultado in lista_resultado:
-                if (resultado.matricula1 == alunoB.matricula) and (resultado.matricula2 == alunoA.matricula):
+                if ((resultado.matricula1 == alunoA.matricula) and (resultado.matricula2 == alunoB.matricula)) or((resultado.matricula1 == alunoB.matricula) and (resultado.matricula2 == alunoA.matricula)):
                     jaExiste = True
                     if int(similaridade.percentual) > int(resultado.similaridade):
                         resultado.similaridade = similaridade.percentual
