@@ -94,7 +94,7 @@ def inserir_novo_aluno(nome, matricula, turma, grupo):
 
     return 0
 
-def inserir_nova_nota(matricula, nota, turma, nome_trabalho, tempo_gasto, prazo_restante):
+def inserir_nova_nota_projeto(matricula, nota, turma, nome_trabalho, tempo_gasto, prazo_restante):
     aluno = Alunos.query.filter_by(matricula=matricula, turma=turma).first()
     if aluno != None:
 
@@ -113,6 +113,34 @@ def inserir_nova_nota(matricula, nota, turma, nome_trabalho, tempo_gasto, prazo_
         #adicionar nova
         else:
             nova_nota = Projetos(nome_trabalho=nome_trabalho, nota=nota, id_aluno=aluno.id, tempo_gasto=tempo_gasto, prazo_restante=str(prazo_restante))
+            try:
+                db.session.add(nova_nota)
+                db.session.commit()
+            except:
+                return 1
+            finally:
+                db.session.close()
+
+        return 0
+    return 1
+
+def inserir_nova_nota_questionario(matricula, nota, turma, questionario):
+    aluno = Alunos.query.filter_by(matricula=matricula, turma=turma).first()
+    if aluno != None:
+
+        nota_antiga = Questionarios.query.filter_by(id_aluno=aluno.id, nome_questionario=questionario).first()
+        #atualizar nota já existente
+        if nota_antiga != None:
+            nota_antiga.nota = nota
+            try:
+                db.session.commit()
+            except:
+                return 1
+            finally:
+                db.session.close()
+        #adicionar nova
+        else:
+            nova_nota = Questionarios(nome_questionario=questionario, nota=nota, id_aluno=aluno.id)
             try:
                 db.session.add(nova_nota)
                 db.session.commit()
