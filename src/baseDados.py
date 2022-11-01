@@ -27,15 +27,15 @@ class Alunos(db.Model):
     turma = db.Column(db.String(15), nullable=False)
     nome = db.Column(db.String(100))
     grupo = db.Column(db.String(50))
-    notas = db.relationship("Notas", backref="aluno")
+    notas = db.relationship("Projetos", backref="aluno")
     similaridades = db.relationship("Similaridades", backref="aluno")
 
     def __repr__(self):
         return str(self.id)
 
 
-class Notas(db.Model):
-    __tablename__ = "notas"
+class Projetos(db.Model):
+    __tablename__ = "projetos"
     id = db.Column(db.Integer, primary_key=True)
     nome_trabalho = db.Column(db.String(10), nullable=False)
     nota = db.Column(db.String(5))
@@ -70,8 +70,17 @@ class RegistrosFerramentas(db.Model):
     def __repr__(self):
         return str(self.id)
 
+class Questionarios(db.Model):
+    __tablename__ = "questionarios"
+    id = db.Column(db.Integer, primary_key=True)
+    nome_questionario = db.Column(db.String(15), nullable=False)
+    nota = db.Column(db.String(5))
+    id_aluno = db.Column(db.Integer, db.ForeignKey("alunos.id"))
 
-# usar para criar o banco
+    def __repr__(self):
+        return self.nota
+
+# usada para criar o banco
 #db.drop_all()
 db.create_all()
 db.session.commit()
@@ -99,7 +108,7 @@ def inserir_nova_nota(matricula, nota, turma, nome_trabalho, tempo_gasto, prazo_
     aluno = Alunos.query.filter_by(matricula=matricula, turma=turma).first()
     if aluno != None:
 
-        nota_antiga = Notas.query.filter_by(id_aluno=aluno.id, nome_trabalho=nome_trabalho).first()
+        nota_antiga = Projetos.query.filter_by(id_aluno=aluno.id, nome_trabalho=nome_trabalho).first()
         #atualizar nota já existente
         if nota_antiga != None:
             nota_antiga.nota = nota
@@ -113,7 +122,7 @@ def inserir_nova_nota(matricula, nota, turma, nome_trabalho, tempo_gasto, prazo_
                 db.session.close()
         #adicionar nova
         else:
-            nova_nota = Notas(nome_trabalho=nome_trabalho, nota=nota, id_aluno=aluno.id, tempo_gasto=tempo_gasto, prazo_restante=str(prazo_restante))
+            nova_nota = Projetos(nome_trabalho=nome_trabalho, nota=nota, id_aluno=aluno.id, tempo_gasto=tempo_gasto, prazo_restante=str(prazo_restante))
             try:
                 db.session.add(nova_nota)
                 db.session.commit()
@@ -129,7 +138,7 @@ def listar_alunos_trabalho(nome_turma, nome_projeto):
     lista_alunos = Alunos.query.filter_by(turma=nome_turma).order_by(Alunos.matricula).all()
 
     for aluno in lista_alunos:
-        resultado_nota = Notas.query.filter_by(id_aluno=aluno.id,nome_trabalho=nome_projeto).first()
+        resultado_nota = Projetos.query.filter_by(id_aluno=aluno.id,nome_trabalho=nome_projeto).first()
         if resultado_nota != None:
             aluno.nota = resultado_nota.nota
             aluno.tempo_gasto = resultado_nota.tempo_gasto
@@ -219,7 +228,7 @@ def listar_resultados_ferramentas(nome_turma, nome_projeto):
             aux.nome1 = alunoA.nome
             aux.grupo1 = alunoA.grupo
             aux.matricula1 = alunoA.matricula
-            aux.nota1 = Notas.query.filter_by(id_aluno=alunoA.id,nome_trabalho=nome_projeto).first()
+            aux.nota1 = Projetos.query.filter_by(id_aluno=alunoA.id,nome_trabalho=nome_projeto).first()
             if similaridade.ferramenta == "jplag":
                 aux.jplag1 = similaridade.percentual
             elif similaridade.ferramenta == "moss":
@@ -227,7 +236,7 @@ def listar_resultados_ferramentas(nome_turma, nome_projeto):
             aux.nome2 = alunoB.nome
             aux.grupo2 = alunoB.grupo
             aux.matricula2 = alunoB.matricula
-            aux.nota2 = Notas.query.filter_by(id_aluno=alunoB.id,nome_trabalho=nome_projeto).first()
+            aux.nota2 = Projetos.query.filter_by(id_aluno=alunoB.id,nome_trabalho=nome_projeto).first()
             lista_resultado.append(aux)
     
     db.session.close()
@@ -250,7 +259,7 @@ def listarTurmas():
         lista_alunos = Alunos.query.filter_by(turma=elemento.turma).all()
         for aluno in lista_alunos:
 
-            lista_trabalhos = Notas.query.filter_by(id_aluno=aluno.id).all()
+            lista_trabalhos = Projetos.query.filter_by(id_aluno=aluno.id).all()
             for trabalho in lista_trabalhos:
                 trabs.add(trabalho.nome_trabalho)
 
@@ -286,16 +295,16 @@ def apagarTrabalhoTurma(nomeTrabalho, nomeTurma):
     apagarResultadosFerramenta(nomeTrabalho,nomeTurma,"jplag")
     apagarResultadosFerramenta(nomeTrabalho,nomeTurma,"moss")
     
-    #apagar em notas, necessario identificar ids dos alunos primeiro
+    #apagar em Projetos, necessario identificar ids dos alunos primeiro
     lista_alunos = Alunos.query.filter_by(turma=nomeTurma).all()
     for aluno in lista_alunos:
-        notas_apagar = Notas.query.filter_by(id_aluno=aluno.id, nome_trabalho=nomeTrabalho).all()
+        notas_apagar = Projetos.query.filter_by(id_aluno=aluno.id, nome_trabalho=nomeTrabalho).all()
         try:
             for nota in notas_apagar:
                 db.session.delete(nota)
             db.session.commit()
         except:
-            print ("Erro deletar banco de dados - notas")
+            print ("Erro deletar banco de dados - Projetos")
         finally:
             db.session.close()
 
@@ -323,7 +332,7 @@ def listar_resultados_ferramentas_antigo(nome_turma, nome_projeto):
         aux.nome1 = aluno.nome
         aux.grupo1 = aluno.grupo
         aux.matricula1 = aluno.matricula
-        aux.nota1 = Notas.query.filter_by(id_aluno=aluno.id,nome_trabalho=nome_projeto).first()
+        aux.nota1 = Projetos.query.filter_by(id_aluno=aluno.id,nome_trabalho=nome_projeto).first()
 
 
         similaridade_jplag = Similaridades.query.filter_by(id_aluno=aluno.id,nome_trabalho=nome_projeto, ferramenta="jplag").first()
@@ -335,7 +344,7 @@ def listar_resultados_ferramentas_antigo(nome_turma, nome_projeto):
             if aluno_outro != None:
                 aux.nome2 = aluno_outro.nome
                 aux.grupo2 = aluno_outro.grupo
-                aux.nota2 = Notas.query.filter_by(id_aluno=aluno_outro.id,nome_trabalho=nome_projeto).first()
+                aux.nota2 = Projetos.query.filter_by(id_aluno=aluno_outro.id,nome_trabalho=nome_projeto).first()
 
         similaridade_moss = Similaridades.query.filter_by(id_aluno=aluno.id,nome_trabalho=nome_projeto, ferramenta="moss").first()
         if similaridade_moss != None:
@@ -347,7 +356,7 @@ def listar_resultados_ferramentas_antigo(nome_turma, nome_projeto):
                 if aluno_outro != None:
                     aux.nome2 = aluno_outro.nome
                     aux.grupo2 = aluno_outro.grupo
-                    aux.nota2 = Notas.query.filter_by(id_aluno=aluno_outro.id,nome_trabalho=nome_projeto).first()
+                    aux.nota2 = Projetos.query.filter_by(id_aluno=aluno_outro.id,nome_trabalho=nome_projeto).first()
 
             else:
                 matricula_outro = similaridade_moss.matricula_outro_aluno
@@ -365,7 +374,7 @@ def listar_resultados_ferramentas_antigo(nome_turma, nome_projeto):
                     if aluno_outro != None:
                         aux2.nome2 = aluno_outro.nome
                         aux2.grupo2 = aluno_outro.grupo
-                        aux2.nota2 = Notas.query.filter_by(id_aluno=aluno_outro.id,nome_trabalho=nome_projeto).first()
+                        aux2.nota2 = Projetos.query.filter_by(id_aluno=aluno_outro.id,nome_trabalho=nome_projeto).first()
                     lista_resultado.append(aux2)
 
         lista_resultado.append(aux)
@@ -460,7 +469,7 @@ def buscaRelatorioAluno(matricula, turma):
         numero_linhas = 0
 
     if aluno != None:
-        notas = Notas.query.filter_by(id_aluno=aluno.id).order_by(Notas.nome_trabalho).all()
+        notas = Projetos.query.filter_by(id_aluno=aluno.id).order_by(Projetos.nome_trabalho).all()
         for resultado_nota in notas:
             elemento_result = elemento()
 
@@ -527,7 +536,7 @@ def gera_relatorio_geral(turma):
         aux.nome_aluno = aluno.nome
         aux.grupo = aluno.grupo
         aux.matricula = aluno.matricula
-        lista_trabalhos = Notas.query.filter_by(id_aluno=aluno.id).order_by(Notas.nome_trabalho).all()
+        lista_trabalhos = Projetos.query.filter_by(id_aluno=aluno.id).order_by(Projetos.nome_trabalho).all()
         for trabalho in lista_trabalhos:
             aux.nomes_trabalhos.append(trabalho.nome_trabalho)
             aux.notas_trabalhos.append(trabalho.nota)
