@@ -541,6 +541,8 @@ def gera_relatorio_geral(turma):
             self.nome_aluno = ""
             self.matricula = ""
             self.grupo = ""
+            self.nomes_questionarios = []
+            self.notas_questionarios = []
             self.nomes_trabalhos = []
             self.notas_trabalhos = []
             self.similaridade_jplag = []
@@ -554,6 +556,12 @@ def gera_relatorio_geral(turma):
         aux.nome_aluno = aluno.nome
         aux.grupo = aluno.grupo
         aux.matricula = aluno.matricula
+
+        lista_questionarios = Questionarios.query.filter_by(id_aluno=aluno.id).order_by(Questionarios.nome_questionario).all()
+        for questionario in lista_questionarios:
+            aux.nomes_questionarios.append(questionario.nome_questionario)
+            aux.notas_questionarios.append(questionario.nota)
+
         lista_trabalhos = Projetos.query.filter_by(id_aluno=aluno.id).order_by(Projetos.nome_trabalho).all()
         for trabalho in lista_trabalhos:
             aux.nomes_trabalhos.append(trabalho.nome_trabalho)

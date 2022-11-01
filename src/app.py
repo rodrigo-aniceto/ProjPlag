@@ -170,11 +170,17 @@ def relatorioturma():
         lista_resultados_base = baseDados.gera_relatorio_geral(nome_turma)
         #criação de lista com todos os trabalhos
         lista_trabalhos = []
+        lista_questinarios = []
         for resultado in lista_resultados_base:
             for trabalho in resultado.nomes_trabalhos:
                 if trabalho not in lista_trabalhos:
                     lista_trabalhos.append(trabalho)
+            for questionario in resultado.nomes_questionarios:
+                if questionario not in lista_questinarios:
+                    lista_questinarios.append(questionario)
+
         lista_trabalhos.sort()
+        lista_questinarios.sort()
         
         #adiciona a tabela informações dos trabalhos que o aluno não fez
         for resultado in lista_resultados_base:
@@ -198,7 +204,7 @@ def relatorioturma():
                         resultado.similaridade_moss.append('0')
                         i = i + 1
 
-    return render_template('relatorioturma.html', mensagem=mensagem, listaresultados=lista_resultados_base, listatrabalhos=lista_trabalhos, tamanholistatrabalhos=len(lista_trabalhos), turma=nome_turma)
+    return render_template('relatorioturma.html', mensagem=mensagem, listaresultados=lista_resultados_base, listatrabalhos=lista_trabalhos, listaquestionarios=lista_questinarios, tamanholistatrabalhos=len(lista_trabalhos), tamanholistaquestionarios=len(lista_questinarios), turma=nome_turma)
 
 
 @app.route("/relatorioaluno")
