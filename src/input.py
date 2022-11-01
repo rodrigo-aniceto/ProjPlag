@@ -1,5 +1,3 @@
-from email.mime import base
-import time
 import pandas as pd
 import baseDados
 import arquivos
