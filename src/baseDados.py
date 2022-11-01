@@ -8,16 +8,6 @@ from random import randrange
 from random import randint
 from datetime import datetime
 
-"""
-pra construir o BD:
-
-flask shell
-from app import db
-db.create_all()
-quit()
-"""
-
-
 
 #modelo de dados do BD
 class Alunos(db.Model):
