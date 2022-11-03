@@ -532,6 +532,7 @@ def buscaRelatorioAluno(matricula, turma):
     return result
 
 
+
 def gera_relatorio_geral(turma):
 
     lista_resultado = []
@@ -541,32 +542,71 @@ def gera_relatorio_geral(turma):
             self.nome_aluno = ""
             self.matricula = ""
             self.grupo = ""
-            self.nomes_questionarios = []
             self.notas_questionarios = []
-            self.nomes_trabalhos = []
             self.notas_trabalhos = []
-            self.similaridade_jplag = []
-            self.similaridade_moss = []
-
-            #serão inseridos novos campos
+            #self.similaridade_jplag = []
+            #self.similaridade_moss = []
 
     lista_alunos = Alunos.query.filter_by(turma=turma).order_by(Alunos.matricula).all()
+
+    lista_trabalhos = []
+    lista_questionarios = []
+
+    lista_trabalhos_temp = []
+    lista_questionarios_temp = []
+
+    for aluno in lista_alunos:
+        questionarios = Questionarios.query.with_entities(Questionarios.nome_questionario).filter_by(id_aluno=aluno.id).order_by(Questionarios.nome_questionario).all()
+        trabalhos = Projetos.query.with_entities(Projetos.nome_trabalho).filter_by(id_aluno=aluno.id).order_by(Projetos.nome_trabalho).all()
+        lista_trabalhos_temp.extend(trabalhos)
+        lista_questionarios_temp.extend(questionarios)
+
+    #remover duplicados
+    lista_trabalhos_temp = list(set(lista_trabalhos_temp))
+    lista_questionarios_temp = list(set(lista_questionarios_temp))
+
+    lista_trabalhos_temp.sort()
+    lista_questionarios_temp.sort()
+
+    #converter de lista para string
+    for trabalho in lista_trabalhos_temp:
+        lista_trabalhos.append(trabalho[0])
+    for questionario in lista_questionarios_temp:
+        lista_questionarios.append(questionario[0])
+
+
     for aluno in lista_alunos:
         aux = elemento()
         aux.nome_aluno = aluno.nome
         aux.grupo = aluno.grupo
         aux.matricula = aluno.matricula
 
-        lista_questionarios = Questionarios.query.filter_by(id_aluno=aluno.id).order_by(Questionarios.nome_questionario).all()
+        questionarios_aluno = Questionarios.query.filter_by(id_aluno=aluno.id).order_by(Questionarios.nome_questionario).all()
+        i = 0
+        imax = len(questionarios_aluno)
         for questionario in lista_questionarios:
-            aux.nomes_questionarios.append(questionario.nome_questionario)
-            aux.notas_questionarios.append(questionario.nota)
+            if i < imax:
+                if questionario == questionarios_aluno[i].nome_questionario:
+                    aux.notas_questionarios.append(questionarios_aluno[i].nota)
+                    i= i+1
+                else:
+                    aux.notas_questionarios.append('-')
+            else:
+                aux.notas_questionarios.append('-')
 
-        lista_trabalhos = Projetos.query.filter_by(id_aluno=aluno.id).order_by(Projetos.nome_trabalho).all()
+        trabalhos_aluno = Projetos.query.filter_by(id_aluno=aluno.id).order_by(Projetos.nome_trabalho).all()
+        i = 0
+        imax = len(trabalhos_aluno)
         for trabalho in lista_trabalhos:
-            aux.nomes_trabalhos.append(trabalho.nome_trabalho)
-            aux.notas_trabalhos.append(trabalho.nota)
-            
+            if i < imax:
+                if trabalho == trabalhos_aluno[i].nome_trabalho:
+                    aux.notas_trabalhos.append(trabalhos_aluno[i].nota)
+                    i = i+1
+                else:
+                    aux.notas_trabalhos.append('-')
+            else:
+                aux.notas_trabalhos.append('-')
+            '''
             aux.similaridade_jplag.append('0')
             aux.similaridade_moss.append('0')
 
@@ -576,10 +616,12 @@ def gera_relatorio_geral(turma):
                     aux.similaridade_moss[-1] = similaridade.percentual
                 elif similaridade.ferramenta == "jplag":
                     aux.similaridade_jplag[-1] = similaridade.percentual
+            '''
+        
         lista_resultado.append(aux)
 
     db.session.close()
-    return lista_resultado
+    return lista_resultado, lista_trabalhos, lista_questionarios
 
 
 def insereRegistroFerrameta(nomeTrabalho, nomeTurma, ferramenta):
