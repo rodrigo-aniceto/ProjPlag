@@ -24,9 +24,9 @@
     <br><br>
     {% endif %}
     
-    <input type="checkbox" id="showquest" name="showquest" value="" checked>
+    <input type="checkbox" id="showquest" name="showquest" value="" onclick="visaoQuest(this)" checked>
     <label for="showquest">Exibir notas questionarios</label><br>
-    <input type="checkbox" id="showproj" name="showproj" value="" checked>
+    <input type="checkbox" id="showproj" name="showproj" value="" onclick="visaoProjs(this)" checked>
     <label for="showproj">Exibir notas projetos</label><br><br>
 
     <table id="alunos-turma" class="table table-bordered table-condensed table-hover">
@@ -36,10 +36,10 @@
                 <th class="table-active">Nome</th>
                 <th class="table-active">Grupo</th>
                 {% for questionario in listaquestionarios %}   
-                <th class="table-info">{{ questionario }} Nota</th>
+                <th class="table-info itemQuestionario">{{ questionario }} Nota</th>
                 {% endfor %}
                 {% for trabalho in listatrabalhos %}   
-                <th class="table-success">{{ trabalho }} Nota</th>
+                <th class="table-success itemProjeto">{{ trabalho }} Nota</th>
                 {% endfor %}
             </tr>
         </thead>
@@ -50,10 +50,10 @@
                 <th>{{ elemento.nome_aluno }}</th>
                 <th>{{ elemento.grupo }}</th>
                 {% for i in range(tamanholistaquestionarios) %}    
-                <th>{{ elemento.notas_questionarios[i] }}</th>
+                <th class="itemQuestionario" >{{ elemento.notas_questionarios[i] }}</th>
                 {% endfor %}
                 {% for i in range(tamanholistatrabalhos) %}    
-                <th>{{ elemento.notas_trabalhos[i] }}</th>
+                <th class="itemProjeto">{{ elemento.notas_trabalhos[i] }}</th>
                 {% endfor %}
             </tr>
             {% endfor %}
@@ -77,6 +77,36 @@
         $('#alunos-turma').DataTable();
     });
 
+
+    function visaoQuest(cb){
+        if (cb.checked == true ){
+            const itens = document.getElementsByClassName("itemQuestionario");
+            for (const item of itens){
+                item.style.display = ""
+            }
+        }
+        else {
+            const itens = document.getElementsByClassName("itemQuestionario");
+            for (const item of itens){
+                item.style.display = "none"
+            }
+        }
+    }
+    function visaoProjs(cb){
+        if (cb.checked == true ){
+            const itens = document.getElementsByClassName("itemProjeto");
+            for (const item of itens){
+                item.style.display = ""
+            }
+        }
+        else {
+            const itens = document.getElementsByClassName("itemProjeto");
+            for (const item of itens){
+                item.style.display = "none"
+            }
+        }
+
+    }
 
 </script>
 
