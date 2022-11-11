@@ -10,13 +10,30 @@
     <h3>Relatório aluno</h3>
 
     <br>
-    {% if resultados|length < 1 %}
+    {% if resultadosprojs|length < 1 and resultadosquests|length < 1 %}
     <h5> Sem dados aluno {{ matricula }}</h5>
     {% else %}
     <span>{{ nome }} - {{ matricula }}</span>
     <br><br>
-    {% for resultado in resultados %}
-    <h5>{{ resultado.nome_trabalho }}</h5>
+    {% if resultadosquests|length >= 1 %}
+    <h5>Questionários</h5>
+    <table class="table">
+        <tr>
+            {% for resultadoquest in resultadosquests %}
+            <th> {{ resultadoquest.nome_questioanario }} </th>
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for resultadoquest in resultadosquests %}
+            <td> {{ resultadoquest.nota_questionario }} </td>
+            {% endfor %}
+        </tr>
+    </table>
+    <br>
+    {% endif %}
+    {% if resultadosprojs|length >= 1 %}
+    {% for resultadoproj in resultadosprojs %}
+    <h5>{{ resultadoproj.nome_trabalho }}</h5>
     <table class="table">
         <tr>
             <th>Nota</th>
@@ -28,16 +45,17 @@
         </tr>
 
         <tr>
-            <td> {{ resultado.nota }} </td>
-            <td> {{ resultado.tempo_gasto }}</td>
-            <td> {{ resultado.prazo_restante }}</td>
-            <td> {{ resultado.moss }}%</td>
-            <td> {{ resultado.jplag }}%</td>
-            {% if resultado.existe_codigo %} <th><a href="/codigofonte?nomeprojeto={{nomeprojeto}}&turma={{turma}}&arquivo={{matricula+".py"}}">{{ matricula+".py" }} ({{ resultado.numero_linhas}})</a></th>{% else %}<th>-</th>{% endif %}
+            <td> {{ resultadoproj.nota }} </td>
+            <td> {{ resultadoproj.tempo_gasto }}</td>
+            <td> {{ resultadoproj.prazo_restante }}</td>
+            <td> {{ resultadoproj.moss }}%</td>
+            <td> {{ resultadoproj.jplag }}%</td>
+            {% if resultadoproj.existe_codigo %} <th><a href="/codigofonte?nomeprojeto={{resultadoproj.nome_trabalho}}&turma={{turma}}&arquivo={{matricula+".py"}}">{{ matricula+".py" }} ({{ resultadoproj.numero_linhas}})</a></th>{% else %}<th>-</th>{% endif %}
         </tr>
     </table>
     <br>
     {% endfor %}
+    {% endif %}
     {% endif %}
 </div>
 

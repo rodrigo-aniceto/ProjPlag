@@ -473,7 +473,7 @@ def insereResultadosBanco(resultados, nomeTrabalho, nomeTurma, ferramenta):
                 db.session.close()
     
 
-def buscaRelatorioAluno(matricula, turma):
+def buscaRelatorioProjetosAluno(matricula, turma):
     result = []
     aluno = Alunos.query.filter_by(turma=turma, matricula=matricula).first()
     class elemento():
@@ -532,6 +532,24 @@ def buscaRelatorioAluno(matricula, turma):
     return result
 
 
+def buscaRelatorioQuestionariosAluno(matricula, turma):
+    result = []
+    aluno = Alunos.query.filter_by(turma=turma, matricula=matricula).first()
+    class elemento():
+        nome_questioanario = ""
+        nota_questionario = ""
+
+
+    if aluno != None:
+        questionarios = Questionarios.query.filter_by(id_aluno=aluno.id).order_by(Questionarios.nome_questionario).all()
+        for questionario in questionarios:
+            elemento_result = elemento()
+            elemento_result.nome_questioanario = questionario.nome_questionario
+            elemento_result.nota_questionario = questionario.nota
+            result.append(elemento_result)
+
+    db.session.close()
+    return result
 
 def gera_relatorio_geral(turma):
 

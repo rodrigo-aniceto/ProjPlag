@@ -200,9 +200,10 @@ def relatorioturma():
 def relatorioaluno():
     matricula_aluno = request.args.get("matricula")
     turma = request.args.get("turma")
-    resultado = baseDados.buscaRelatorioAluno(matricula_aluno, turma)
+    resultado_projs = baseDados.buscaRelatorioProjetosAluno(matricula_aluno, turma)
+    resultado_quests = baseDados.buscaRelatorioQuestionariosAluno(matricula_aluno, turma)
     nome = baseDados.buscaNomeAluno(matricula_aluno, turma)
-    return render_template("relatorioaluno.html", resultados=resultado, matricula=matricula_aluno, nome=nome)
+    return render_template("relatorioaluno.html", resultadosprojs=resultado_projs, resultadosquests=resultado_quests, matricula=matricula_aluno, nome=nome, turma=turma)
 
 
 @app.route("/codigofonte")
