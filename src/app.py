@@ -16,11 +16,15 @@ from random import randint
 
 app = Flask(__name__)
 Bootstrap(app) #isso é para colocar extensões tipo o bootstrap
-db_connect = config('CONNECT_STRING')
-app.config["SQLALCHEMY_DATABASE_URI"] = db_connect #string de conexão privada SQLALCHEMY
+
+db_connect = config('CONNECT_STRING') #string de conexão privada SQLALCHEMY
+file_upload_key = config('FILE_KEY') #chave secreta usada no upload de arquivos
+
+app.config["SQLALCHEMY_DATABASE_URI"] = db_connect
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'supersecretkey'
+app.config['SECRET_KEY'] = file_upload_key
 app.config['UPLOAD_FOLDER'] = '../input'
+
 db = SQLAlchemy(app)
 
 class UploadFileForm(FlaskForm):
@@ -32,8 +36,8 @@ def telaInicial():
     lista_turmas = baseDados.listarTurmas()
     form = UploadFileForm()
     if form.validate_on_submit():
-        file = form.file.data # First grab the file
-        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
+        file = form.file.data # coleta do arquivo
+        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Salvar o arquivo
         return "File has been uploaded."
 
     return render_template('index.html', listaturmas=lista_turmas,form=form)
