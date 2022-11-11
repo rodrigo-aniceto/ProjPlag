@@ -3,6 +3,10 @@ from sys import path
 from flask import Flask, request, render_template
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+from wtforms import FileField, SubmitField
+from werkzeug.utils import secure_filename
+from wtforms.validators import InputRequired
 import arquivos
 import baseDados
 import ferramentas
@@ -15,13 +19,24 @@ Bootstrap(app) #isso é para colocar extensões tipo o bootstrap
 db_connect = config('CONNECT_STRING')
 app.config["SQLALCHEMY_DATABASE_URI"] = db_connect #string de conexão privada SQLALCHEMY
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'supersecretkey'
+app.config['UPLOAD_FOLDER'] = '../input'
 db = SQLAlchemy(app)
 
+class UploadFileForm(FlaskForm):
+    file = FileField("File", validators=[InputRequired()])
+    submit = SubmitField("Upload File")
 
-@app.route("/")
+@app.route("/", methods=['GET',"POST"])
 def telaInicial():
     lista_turmas = baseDados.listarTurmas()
-    return render_template('index.html', listaturmas=lista_turmas)
+    form = UploadFileForm()
+    if form.validate_on_submit():
+        file = form.file.data # First grab the file
+        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
+        return "File has been uploaded."
+
+    return render_template('index.html', listaturmas=lista_turmas,form=form)
 
 
 #relatoriotrabalho?turma=turmaExemplo&nomeprojeto=projeto1
@@ -170,29 +185,7 @@ def relatorioturma():
         mensagem = "Turma não cadastrada"
     else:
         lista_resultados_base, lista_trabalhos, lista_questionarios = baseDados.gera_relatorio_geral(nome_turma)
-        '''
-        #adiciona a tabela informações dos trabalhos que o aluno não fez
-        for resultado in lista_resultados_base:
-            if len(resultado.nomes_trabalhos) != len(lista_trabalhos):
-                i=0
-                for trabalho in lista_trabalhos:
-                    if i < len(resultado.nomes_trabalhos):
-                        if (resultado.nomes_trabalhos[i] == trabalho):
-                            i = i+1
-                        else:
-                            #adicionar na posição i de resultado.nomes_trabalhos trabalho e 0 nessa posiação nas outras 
-                            resultado.nomes_trabalhos.insert(i, trabalho)
-                            resultado.notas_trabalhos.insert(i, '0.00')
-                            resultado.similaridade_jplag.insert(i, '0')
-                            resultado.similaridade_moss.insert(i, '0')
-                            i = i + 1
-                    else:
-                        resultado.nomes_trabalhos.append(trabalho)
-                        resultado.notas_trabalhos.append('0.00')
-                        resultado.similaridade_jplag.append('0')
-                        resultado.similaridade_moss.append('0')
-                        i = i + 1
-        '''
+
     return render_template('relatorioturma.html', mensagem=mensagem, listaresultados=lista_resultados_base, listatrabalhos=lista_trabalhos, listaquestionarios=lista_questionarios, tamanholistatrabalhos=len(lista_trabalhos), tamanholistaquestionarios=len(lista_questionarios), turma=nome_turma)
 
 

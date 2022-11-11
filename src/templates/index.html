@@ -34,12 +34,26 @@
 
     </table>
     {% endif %}
-
+    
+    <input id="botaoturma" type="button" value="Criar nova turma" onclick="ShowDiv()" />
+    <div id="formnovaturma" style="display:none; min-width: 300px;" class="border">
+    
+        <form method='POST' enctype='multipart/form-data'>
+            {{form.hidden_tag()}}
+            {{form.file()}}
+            {{form.submit()}}
+            <span>Hello!</span>
+        </form>
 </div>
 
 {% endblock %}
 
 {% block scripts %}
-
+<script>
+    function ShowDiv(){
+        document.getElementById("formnovaturma").style.display = "";
+        document.getElementById("botaoturma").style.display = "none";
+    }
+</script>
 
 {% endblock %}
