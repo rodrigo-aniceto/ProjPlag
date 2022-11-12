@@ -38,9 +38,9 @@ def telaInicial():
     if form.validate_on_submit():
         file = form.file.data # coleta do arquivo
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Salvar o arquivo
-        return "File has been uploaded."
+        return render_template('index.html', listaturmas=lista_turmas,form=form, mensagem="Arquivo submetido com sucesso")
 
-    return render_template('index.html', listaturmas=lista_turmas,form=form)
+    return render_template('index.html', listaturmas=lista_turmas,form=form, mensagem="")
 
 
 #relatoriotrabalho?turma=turmaExemplo&nomeprojeto=projeto1
