@@ -35,12 +35,15 @@
     </table>
     {% endif %}
     
-    <input id="botaoturma" type="button" value="Criar nova turma" onclick="ShowDiv()" />
+    <input id="botaoturma" type="button" value="Subir arquivo" onclick="ShowDiv()" />
     <div id="formnovaturma" style="display:none; min-width: 300px;" class="border">
     
-        <form method='POST' enctype='multipart/form-data'>
+        <form action="/" method='POST' enctype='multipart/form-data'>
+            
+            <label for="nometurma">Nome turma:</label><br>
+            <input type="text" id="nometurma" name="nometurma"><br><br>
             {{form.hidden_tag()}}
-            {{form.file()}}
+            {{form.file()}}<br><br>
             {{form.submit()}}
         </form>
     </div>
