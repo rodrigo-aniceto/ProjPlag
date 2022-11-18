@@ -9,8 +9,9 @@
 
 <div class="content" id="conteudo">
     <h3>Relatório das Ferramentas de Plágio </h3>
-    <h5>{{nomeprojeto}} - {{turma}}</h5>
-
+    <h5>Turma: <a href="/relatorioturma?turma={{turma}}">{{turma}}</a></h5> 
+    <h5>Nome Projeto: <a href="/relatoriotrabalho?turma={{turma}}&nomeprojeto={{nomeprojeto}}">{{nomeprojeto}}</a></h5>
+    
     <br><br>
     
     {% if listaresultados|length < 1 %}
