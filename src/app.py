@@ -4,7 +4,7 @@ from flask import Flask, request, render_template
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import FileField, SubmitField
+from wtforms import FileField, StringField, SubmitField
 from werkzeug.utils import secure_filename
 from wtforms.validators import InputRequired
 import arquivos
@@ -29,6 +29,7 @@ db = SQLAlchemy(app)
 
 class UploadFileForm(FlaskForm):
     file = FileField("File", validators=[InputRequired()])
+    turma = StringField("Turma", validators=[InputRequired()])
     submit = SubmitField("Submeter")
 
 @app.route("/", methods=['GET',"POST"])
@@ -37,7 +38,8 @@ def telaInicial():
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data # coleta do arquivo
-        nome_turma = request.form['nometurma']
+        nome_turma = form.turma.data
+        return ("nome arquivos: "+ file.filename+" nome turma: "+nome_turma)
         if nome_turma == "":
             return render_template('index.html', listaturmas=lista_turmas,form=form, mensagem="Favor informar nome turma")
         else:
@@ -274,7 +276,14 @@ def verifica_moss():
     return result
 
 
-
+@app.route("/apagarturma")
+def apagar_turma():
+    turma = request.args.get("turma")
+    #lista_trabalhos = baseDados.lista_trabalhos_turma(turma) #criar função
+    # loop percorrer trabalhos
+    # todo verificar se todos os dados são apagados e peercorrer questionários tbm
+    #baseDados.apagarTrabalhoTurma(nomeTrabalho=trabalho,nomeTurma=turma)
+    #arquivos.apagarTrabalhoTurma(nomeTrabalho=trabalho,nomeTurma=turma)
 
 
 
