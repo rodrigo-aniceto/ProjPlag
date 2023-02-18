@@ -57,8 +57,8 @@ def inserir_planilha_projeto(turma, nome_arquivo, data_final, trabalho):
     data_final = converte_data(data_final)
     print ("data final: "+data_final)
 
-    arquivos.criarTurma (turma)
-    arquivos.criarTrabalhoTurma(trabalho, turma)
+    #arquivos.criarTurma (turma)
+    #arquivos.criarTrabalhoTurma(trabalho, turma)
 
     df = pd.read_csv("../input/"+nome_arquivo)
 
@@ -86,10 +86,10 @@ def inserir_planilha_projeto(turma, nome_arquivo, data_final, trabalho):
         #print ("Prazo restante: "+str(prazo_restante)+ " e tempo usado: "+tempo_gasto)
 
         print (nome+" - "+matricula+ " nota: "+nota+" tempo gasto: "+tempo_gasto+" prazo restante: "+str(prazo_restante))
-        baseDados.inserir_novo_aluno(nome, matricula, turma, "")
-        baseDados.inserir_nova_nota_projeto(matricula, nota, turma, trabalho, tempo_gasto, prazo_restante)
+        #baseDados.inserir_novo_aluno(nome, matricula, turma, "")
+        #baseDados.inserir_nova_nota_projeto(matricula, nota, turma, trabalho, tempo_gasto, prazo_restante)
 
-        arquivos.escreveCodigoTrabalho(matricula+".py", trabalho, turma, df['Resposta 1'][i])
+        #arquivos.escreveCodigoTrabalho(matricula+".py", trabalho, turma, df['Resposta 1'][i])
 
 
 

@@ -130,6 +130,7 @@ def geraListaSimilaridade (listaResult):
     # lista todos os resultados
     for elemento in listaResult:
         aux = []
+
         aux.append(elemento[0].split('.',1)[0]) #remover caracters depois do . e %
         aux.append(elemento[1].split('%',1)[0].split('.',1)[0])
         aux.append(elemento[2].split('.',1)[0])
