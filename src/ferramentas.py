@@ -96,7 +96,7 @@ def executaJplag(nomeTrabalho, nomeTurma):
         #insere no banco
         baseDados.insereResultadosBanco(resultados, nomeTrabalho, nomeTurma, "jplag")
         baseDados.insereRegistroFerrameta(nomeTrabalho,nomeTurma,"jplag")
-        arquivos.apagarPastaJplag(nomeTrabalho, nomeTurma)
+        #arquivos.apagarPastaJplag(nomeTrabalho, nomeTurma)
 
 
 

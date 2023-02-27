@@ -36,6 +36,7 @@
                 <th class="table-active">Matrícula </th>
                 <th class="table-active">Nome</th>
                 <th class="table-active">Grupo</th>
+                <th class="table-active">Suspeita</th>
                 <th class="table-active">Tempo Utilizado</th>
                 <th class="table-active">Prazo Restante</th>
                 <th class="table-active">Nota</th>
@@ -51,6 +52,7 @@
                 <th><a href="/relatorioaluno?matricula={{elemento.matricula}}&turma={{turma}}">{{ elemento.matricula }}</a></th>
                 <th>{{ elemento.nome }}</th>
                 <th>{{ elemento.grupo }}</th>
+                <th>{{ elemento.suspeita }}</th>
                 <th>{{ elemento.tempo_gasto }}</th>
                 <th>{{ elemento.prazo_restante }}</th>
                 {% if (elemento.nota != None) %} <th> {{ elemento.nota }}</th> {% else %} <th>-</th> {% endif %} 

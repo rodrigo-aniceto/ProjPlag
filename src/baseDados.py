@@ -161,6 +161,7 @@ def listar_alunos_trabalho(nome_turma, nome_projeto):
             aluno.nota = resultado_nota.nota
             aluno.tempo_gasto = resultado_nota.tempo_gasto
             aluno.prazo_restante = resultado_nota.prazo_restante
+            aluno.suspeita = "0 - Nula"
 
             if aluno.prazo_restante == '0':
                 aluno.prazo_restante = "0 dias"
@@ -192,6 +193,13 @@ def listar_alunos_trabalho(nome_turma, nome_projeto):
         aluno.existe_codigo = arquivos.existeArquivoTrabalho(nome_projeto, nome_turma, aluno.matricula+".py")
         if (aluno.existe_codigo):
             aluno.numero_linhas = arquivos.contaLinhasCodigo(nome_projeto, nome_turma, aluno.matricula+".py")
+
+        if (aluno.moss >=40) or (aluno.jplag >= 80):
+            aluno.suspeita = "3 - Alta"
+        elif (aluno.moss >= 30) or (aluno.jplag >= 60):
+            aluno.suspeita = "2 - Média"
+        elif (aluno.moss >= 20) or (aluno.jplag >= 50):
+            aluno.suspeita = "1 - Baixa"
     
     db.session.close()
     return lista_alunos
@@ -560,6 +568,7 @@ def gera_relatorio_geral(turma):
             self.nome_aluno = ""
             self.matricula = ""
             self.grupo = ""
+            self.suspeita = ""
             self.notas_questionarios = []
             self.notas_trabalhos = []
             #self.similaridade_jplag = []
