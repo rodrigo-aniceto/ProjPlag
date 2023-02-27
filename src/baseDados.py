@@ -161,7 +161,7 @@ def listar_alunos_trabalho(nome_turma, nome_projeto):
             aluno.nota = resultado_nota.nota
             aluno.tempo_gasto = resultado_nota.tempo_gasto
             aluno.prazo_restante = resultado_nota.prazo_restante
-            aluno.suspeita = "0 - Nula"
+            
 
             if aluno.prazo_restante == '0':
                 aluno.prazo_restante = "0 dias"
@@ -194,12 +194,7 @@ def listar_alunos_trabalho(nome_turma, nome_projeto):
         if (aluno.existe_codigo):
             aluno.numero_linhas = arquivos.contaLinhasCodigo(nome_projeto, nome_turma, aluno.matricula+".py")
 
-        if (aluno.moss >=40) or (aluno.jplag >= 80):
-            aluno.suspeita = "3 - Alta"
-        elif (aluno.moss >= 30) or (aluno.jplag >= 60):
-            aluno.suspeita = "2 - Média"
-        elif (aluno.moss >= 20) or (aluno.jplag >= 50):
-            aluno.suspeita = "1 - Baixa"
+        aluno.suspeita = geraSuspeitaPlagio(aluno.moss, aluno.jplag)
     
     db.session.close()
     return lista_alunos
@@ -681,3 +676,18 @@ def buscaNomeAluno(matricula, turma):
         
     db.session.close()
     return
+
+
+def geraSuspeitaPlagio (moss, jplag):
+    suspeita = ""
+    if (moss < 20) and (jplag < 50): # caso mais frequente
+        suspeita = "0 - Nula"
+    
+    elif (moss >=40) or (jplag >= 80):
+        suspeita = "3 - Alta"
+    elif (moss >= 30) or (jplag >= 60):
+        suspeita = "2 - Média"
+    else: # (moss >= 20) or (jplag >= 50):
+        suspeita = "1 - Baixa"
+
+    return suspeita
