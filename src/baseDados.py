@@ -643,6 +643,27 @@ def gera_relatorio_geral(turma):
                     aux.similaridade_jplag[-1] = similaridade.percentual
             '''
         
+
+        moss = Similaridades.query.filter_by(id_aluno=aluno.id, ferramenta="moss").all()
+        jplag = Similaridades.query.filter_by(id_aluno=aluno.id, ferramenta="jplag").all()
+
+        listM = []
+        listJ = []
+        maxMoss = 0
+        maxJplag = 0
+        
+        if moss != None:
+            for m in moss:
+                listM.append(int(m.percentual))
+                maxMoss = max(listM)
+        
+        if jplag != None:
+            for j in jplag:
+                listJ.append(int(j.percentual))
+                maxJplag = max(listJ)
+        
+        aux.suspeita = geraSuspeitaPlagio(maxMoss, maxJplag)
+
         lista_resultado.append(aux)
 
     db.session.close()
