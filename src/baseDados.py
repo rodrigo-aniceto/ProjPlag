@@ -482,6 +482,7 @@ def buscaRelatorioProjetosAluno(matricula, turma):
     class elemento():
         nome_trabalho = ""
         nota = ""
+        suspeita  =""
         tempo_gasto = ""
         prazo_restante = ""
         jplag = 0
@@ -525,6 +526,8 @@ def buscaRelatorioProjetosAluno(matricula, turma):
                 elemento_result.moss = sim
             else:
                 elemento_result.moss = 0
+
+            elemento_result.suspeita = geraSuspeitaPlagio (elemento_result.moss, elemento_result.jplag)
             
             elemento_result.existe_codigo = arquivos.existeArquivoTrabalho(resultado_nota.nome_trabalho, turma, matricula+".py")
             if (elemento_result.existe_codigo):
