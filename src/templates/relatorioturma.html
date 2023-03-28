@@ -8,7 +8,7 @@
 {% block content %}
 
 <div class="content" id="conteudo">
-    <h3>Relatório da turma - {{turma}} </h3>
+    <h3>Class report - {{turma}} </h3>
 
     <br><br>
     
@@ -17,30 +17,33 @@
     {% else %}
 
     {% if listatrabalhos|length > 0 %}
-    <span>Clique para ver mais detalhes dos trabalhos:</span><br><br>
+    <span>Click for more details about the projects:</span><br><br>
     {% for trabalho in listatrabalhos %}
     <button type="button" class="btn btn-secondary" onclick="window.location.href='/relatoriotrabalho?turma={{turma}}&nomeprojeto={{trabalho}}';">{{ trabalho }}</button>
     {% endfor %}
     <br><br>
     {% endif %}
+
+    
+
     
     <input type="checkbox" id="showquest" name="showquest" value="" onclick="visaoQuest(this)" checked>
-    <label for="showquest">Exibir notas questionarios</label><br>
+    <label for="showquest">View quiz grades</label><br>
     <input type="checkbox" id="showproj" name="showproj" value="" onclick="visaoProjs(this)" checked>
-    <label for="showproj">Exibir notas projetos</label><br><br>
+    <label for="showproj">View projects grades</label><br><br>
 
     <table id="alunos-turma" class="table table-bordered table-condensed table-hover">
         <thead>
             <tr class="active">
-                <th class="table-active">Matrícula</th>
-                <th class="table-active">Nome</th>
-                <th class="table-active">Grupo</th>
-                <th class="table-active">Suspeita</th>
+                <th class="table-active">Student registration</th>
+                <th class="table-active">Name</th>
+                <th class="table-active">Group</th>
+                <th class="table-active">Suspicion</th>
                 {% for questionario in listaquestionarios %}   
-                <th class="table-info itemQuestionario">{{ questionario }} Nota</th>
+                <th class="table-info itemQuestionario">{{ questionario }} Grade</th>
                 {% endfor %}
                 {% for trabalho in listatrabalhos %}   
-                <th class="table-success itemProjeto">{{ trabalho }} Nota</th>
+                <th class="table-success itemProjeto">{{ trabalho }} Grade</th>
                 {% endfor %}
             </tr>
         </thead>

@@ -185,15 +185,15 @@ def graforelatorio():
 @app.route("/relatorioturma")
 def relatorioturma():
     nome_turma = request.args.get("turma")
-    mensagem = "relatório indisponivel"
+    mensagem = "Unavailable report"
     lista_resultados_base = []
     lista_trabalhos = []
     lista_questionarios = []
 
     if (nome_turma == None):
-        mensagem = "Parametros incorretos"
+        mensagem = "Incorrect parameters"
     elif (arquivos.existeTurma(nome_turma) == False):
-        mensagem = "Turma não cadastrada"
+        mensagem = "Class not registered"
     else:
         lista_resultados_base, lista_trabalhos, lista_questionarios = baseDados.gera_relatorio_geral(nome_turma)
 

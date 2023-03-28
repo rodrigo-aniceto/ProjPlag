@@ -705,13 +705,13 @@ def buscaNomeAluno(matricula, turma):
 def geraSuspeitaPlagio (moss, jplag):
     suspeita = ""
     if (moss < 20) and (jplag < 50): # caso mais frequente
-        suspeita = "0 - Nula"
+        suspeita = "0 - Null"
     
     elif (moss >=40) or (jplag >= 80):
-        suspeita = "3 - Alta"
+        suspeita = "3 - High"
     elif (moss >= 30) or (jplag >= 60):
-        suspeita = "2 - Média"
+        suspeita = "2 - Medium"
     else: # (moss >= 20) or (jplag >= 50):
-        suspeita = "1 - Baixa"
+        suspeita = "1 - Low"
 
     return suspeita
