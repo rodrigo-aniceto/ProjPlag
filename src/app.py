@@ -30,7 +30,7 @@ db = SQLAlchemy(app)
 class UploadFileForm(FlaskForm):
     file = FileField("File", validators=[InputRequired()])
     turma = StringField("Turma", validators=[InputRequired()])
-    submit = SubmitField("Submeter")
+    submit = SubmitField("Upload")
 
 @app.route("/", methods=['GET',"POST"])
 def telaInicial():

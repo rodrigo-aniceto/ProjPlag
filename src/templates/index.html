@@ -8,26 +8,26 @@
 {% block content %}
 
 <div class="content" id="conteudo">
-    <h3>Tela Inicial </h3>
+    <h3>Home screen </h3>
 
     {% if listaturmas|length < 1 %}
-    <h4> Nenhuma turma cadastrada</h4>
+    <h4> No registered classes</h4>
     {% else %}
 
 
     <br><br>
     <table class="table">
         <tr>
-            <th>Turma</th>
-            <th>Projetos</th>
-            <th>Ação</th>
+            <th>Class</th>
+            <th>Projects</th>
+            <th>Action</th>
         </tr>
         {% for turma in listaturmas %}
 
         <tr>
             <td> <a href="/relatorioturma?turma={{turma.nome}}">{{ turma.nome }} </a></td>
             <td> {{ turma.projetos }} </td>
-            <td> apagar </td>
+            <td> delete </td>
         </tr>
 
         {% endfor %}
@@ -35,12 +35,12 @@
     </table>
     {% endif %}
     
-    <input id="botaoturma" type="button" value="Subir arquivo" onclick="ShowDiv()" />
+    <input id="botaoturma" type="button" value="Upload file" onclick="ShowDiv()" />
     <div id="formnovaturma" style="display:none; min-width: 300px;" class="border">
     
         <form action="/" method='POST' enctype='multipart/form-data'>
             
-            <label for="nometurma">Nome turma:</label><br>
+            <label for="nometurma">Class name:</label><br>
             <input type="text" id="nometurma" name="nometurma"><br><br>
             {{form.hidden_tag()}}
             {{form.file()}}<br><br>
