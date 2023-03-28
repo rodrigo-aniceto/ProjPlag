@@ -44,19 +44,19 @@ def verificaExecucaoMoss(nomeTrabalho, nomeTurma):
                 ultima_linha = arq.readlines()[-1]
             except:
                 arq.close()
-                return "Executando moss..."
+                return "Running Moss..."
             else:
                 arq.close()
                 if ultima_linha.startswith("http"):
-                    return "Concluindo execução..."
+                    return "Completing execution..."
                 else:
-                    return "ERRO comunicação servidor"
+                    return "Server communication ERROR"
 
     
     if registro != None:
-        return "Última execução Moss: "+ registro.data_execucao.strftime("%d/%m/%Y, %H:%M:%S")
+        return "Last run of Moss: "+ registro.data_execucao.strftime("%d/%m/%Y, %H:%M:%S")
     else:
-        return "Moss ainda não executado"
+        return "Moss not executed"
     
 
 def apagaExecucaoMoss(nomeTrabalho, nomeTurma):
@@ -105,9 +105,9 @@ def verificaExecucaoJplag(nomeTrabalho, nomeTurma):
 
     registro = baseDados.buscaRegistroFerramenta(nomeTrabalho, nomeTurma, "jplag")
     if registro != None:
-        return "Última execução Jplag: "+ registro.data_execucao.strftime("%d/%m/%Y, %H:%M:%S")
+        return "Last run of Jplag: "+ registro.data_execucao.strftime("%d/%m/%Y, %H:%M:%S")
     else:
-        return "Jplag ainda não executado"
+        return "Jplag not executed"
 
 '''
     #verificação manual desabilitada

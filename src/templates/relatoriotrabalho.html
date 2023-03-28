@@ -7,9 +7,9 @@
 {% block content %}
 
 <div class="content" id="conteudo">
-    <h3>Relatório do Trabalho </h3>
-    <h5>Turma: <a href="/relatorioturma?turma={{turma}}">{{turma}}</a></h5> 
-    <h5>Nome Projeto: {{nomeprojeto}}</h5>
+    <h3>Project Report </h3>
+    <h5>Class: <a href="/relatorioturma?turma={{turma}}">{{turma}}</a></h5> 
+    <h5>Project Name: {{nomeprojeto}}</h5>
 
     <br><br>
     
@@ -17,32 +17,32 @@
     <h5> {{mensagem}}</h5>
     {% else %}
 
-    <button type="button" class="btn btn-secondary" onclick="executarMoss();">Executar Moss</button>
+    <button type="button" class="btn btn-secondary" onclick="executarMoss();">Execute Moss</button>
     <!--<button type="button" class="btn btn-secondary" onclick="verificarMoss();">Verificar Moss</button>-->
     <span id="rmoss"></span><br><br>
 
 
-    <button type="button" class="btn btn-secondary" onclick="executarJplag();">Executar JPlag</button>
+    <button type="button" class="btn btn-secondary" onclick="executarJplag();">Execute JPlag</button>
     <!--<button type="button" class="btn btn-secondary" onclick="verificarJplag();">Verificar Jplag</button>-->
     <span id="rjplag"></span><br><br>
 
-    <button type="button" class="btn btn-secondary" onclick="window.location.href='/relatorioferramentas?turma={{turma}}&nomeprojeto={{nomeprojeto}}';">Detalhes</button>
+    <button type="button" class="btn btn-secondary" onclick="window.location.href='/relatorioferramentas?turma={{turma}}&nomeprojeto={{nomeprojeto}}';">Details</button>
     <br><br>
 
     <!--Usar contextual class pra marcar os perfis de aluno-->
     <table id="alunos-turma" class="table table-bordered table-condensed table-hover">
         <thead>
             <tr class="active">
-                <th class="table-active">Matrícula </th>
-                <th class="table-active">Nome</th>
-                <th class="table-active">Grupo</th>
-                <th class="table-active">Suspeita</th>
-                <th class="table-active">Tempo Utilizado</th>
-                <th class="table-active">Prazo Restante</th>
-                <th class="table-active">Nota</th>
-                <th class="table-active">Resultado Moss</th>
-                <th class="table-active">Resultado Jplag</th>
-                <th class="table-active">Código Fonte</th>
+                <th class="table-active">Student registration </th>
+                <th class="table-active">Name</th>
+                <th class="table-active">Group</th>
+                <th class="table-active">Suspicion</th>
+                <th class="table-active">Time spent</th>
+                <th class="table-active">Deadline left</th>
+                <th class="table-active">Grade</th>
+                <th class="table-active">Moss results</th>
+                <th class="table-active">Jplag results</th>
+                <th class="table-active">Source code</th>
             </tr>
         </thead>
         <tbody>
