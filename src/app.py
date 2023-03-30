@@ -39,7 +39,7 @@ def telaInicial():
     if form.validate_on_submit():
         file = form.file.data # coleta do arquivo
         nome_turma = form.turma.data
-        return ("nome arquivos: "+ file.filename+" nome turma: "+nome_turma)
+        return ("file name: "+ file.filename+" class name: "+nome_turma)
         if nome_turma == "":
             return render_template('index.html', listaturmas=lista_turmas,form=form, mensagem="Favor informar nome turma")
         else:
@@ -56,14 +56,14 @@ def relatoriotrabalho():
     nome_projeto = request.args.get("nomeprojeto")
     nome_turma = request.args.get("turma")
     if (nome_projeto == None) or (nome_turma == None):
-        return "Parametros incorretos"
+        return "Incorrect parameters"
     
     lista_alunos = []
-    mensagem = "relatorio indisponivel"
+    mensagem = "the report is unavailable now"
     if (arquivos.existeTurma(nome_turma) == False):
-        mensagem = "Turma não cadastrada"
+        mensagem = "Class not registered"
     elif (arquivos.existeTrabalhoTurma(nome_projeto, nome_turma) == False):
-        mensagem = "Trabalho não cadastrado"
+        mensagem = "Project not registered"
     else:
         lista_alunos = baseDados.listar_alunos_trabalho(nome_turma, nome_projeto)
     
@@ -75,14 +75,14 @@ def relatorioferramentas():
     nome_projeto = request.args.get("nomeprojeto")
     nome_turma = request.args.get("turma")
     if (nome_projeto == None) or (nome_turma == None):
-        return "Parametros incorretos"
+        return "Incorrect parameters"
     
     lista_resultados = []
-    mensagem = "relatório indisponivel"
+    mensagem = "the report is unavailable now"
     if (arquivos.existeTurma(nome_turma) == False):
-        mensagem = "Turma não cadastrada"
+        mensagem = "Class not registered"
     elif (arquivos.existeTrabalhoTurma(nome_projeto, nome_turma) == False):
-        mensagem = "Trabalho não cadastrado"
+        mensagem = "Project not registered"
     else:
         lista_resultados = baseDados.listar_resultados_ferramentas(nome_turma, nome_projeto)
     
@@ -107,11 +107,11 @@ def graforelatorio():
     lista_arestas = []
 
     if (arquivos.existeTurma(turma) == False):
-        mensagem = "Turma não cadastrada"
+        mensagem = "Class not registered"
     elif (arquivos.existeTrabalhoTurma(nomeprojeto, turma) == False):
-        mensagem = "Trabalho não cadastrado"
+        mensagem = "Project not registered"
     elif ferramenta != "moss" and ferramenta != "jplag":
-        mensagem = "Ferramenta inválida"
+        mensagem = "Invalid tool"
     else:
         lista_resultados = baseDados.listarDadosGrafoFerramentas(turma, nomeprojeto, ferramenta, percentual)
         class nos:

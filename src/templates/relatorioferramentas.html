@@ -8,9 +8,9 @@
 {% block content %}
 
 <div class="content" id="conteudo">
-    <h3>Relatório das Ferramentas de Plágio </h3>
-    <h5>Turma: <a href="/relatorioturma?turma={{turma}}">{{turma}}</a></h5> 
-    <h5>Nome Projeto: <a href="/relatoriotrabalho?turma={{turma}}&nomeprojeto={{nomeprojeto}}">{{nomeprojeto}}</a></h5>
+    <h3>Plagiarism Detection Tools Report</h3>
+    <h5>Class: <a href="/relatorioturma?turma={{turma}}">{{turma}}</a></h5> 
+    <h5>Project name: <a href="/relatoriotrabalho?turma={{turma}}&nomeprojeto={{nomeprojeto}}">{{nomeprojeto}}</a></h5>
     
     <br><br>
     
@@ -25,24 +25,24 @@
     <button type="button" class="btn btn-secondary" onclick="window.location.href='/graforelatorio?turma={{turma}}&nomeprojeto={{nomeprojeto}}&ferramenta=jplag';">Grafo Jplag</button>
     -->
 
-    <input id="botaoGrafo" type="button" value="Gerar Grafo Similaridades" onclick="ShowDiv()" />
+    <input id="botaoGrafo" type="button" value="Generate Similarity Graph" onclick="ShowDiv()" />
     <div id="formGrafo" style="display:none; min-width: 300px;" class="border">
     
     <form action="/graforelatorio" method="GET">
-        <h5>Gerar grafo de Similaridades</h5>
-        <span>Recomendado no mínimo 30% para moss ou 70% para JPlag</span><br><br>
-        <label for="ferramenta">ferramenta:</label>
+        <h5>Generate Similarity Graph</h5>
+        <span>Recommended minimum 30% for Moss or 70% for JPlag</span><br><br>
+        <label for="ferramenta">Tool:</label>
         <select name="ferramenta" id="ferramenta">
           <option value="moss">Moss</option>
           <option value="jplag">Jplag</option>
         </select>
         <br><br>
-        <label for="percentual">percentual:</label><br>
+        <label for="percentual">percentage:</label><br>
         <input type="text" id="percentual" name="percentual">%
         <br><br>
         <input type="hidden" id="turma" name="turma" value="{{turma}}" />
         <input type="hidden" id="nomeprojeto" name="nomeprojeto" value="{{nomeprojeto}}" />
-        <input type="submit" value="Gerar Grafo">
+        <input type="submit" value="Run">
       </form>
       <br>
     </div>
@@ -52,18 +52,18 @@
     <table id="alunos-turma" class="table table-bordered table-condensed table-hover">
         <thead>
             <tr class="active">
-                <th class="table-success">Matrícula</th>
-                <th class="table-success">Nome</th>
-                <th class="table-success">Grupo</th>
-                <th class="table-success">Nota</th>
+                <th class="table-success">Registration</th>
+                <th class="table-success">Name</th>
+                <th class="table-success">Group</th>
+                <th class="table-success">Grade</th>
                 <th class="table-success">Moss</th>
                 <th class="table-success">Jplag</th>
                 <th class="table-info">Jplag</th>
                 <th class="table-info">Moss</th>
-                <th class="table-info">Nota</th>
-                <th class="table-info">Grupo</th>
-                <th class="table-info">Nome</th>
-                <th class="table-info">Matrícula</th>
+                <th class="table-info">Grade</th>
+                <th class="table-info">Group</th>
+                <th class="table-info">Name</th>
+                <th class="table-info">Registration</th>
             </tr>
         </thead>
         <tbody>
