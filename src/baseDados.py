@@ -164,11 +164,11 @@ def listar_alunos_trabalho(nome_turma, nome_projeto):
             
 
             if aluno.prazo_restante == '0':
-                aluno.prazo_restante = "0 dias"
+                aluno.prazo_restante = "0 days"
             elif aluno.prazo_restante == '1':
-                aluno.prazo_restante = "1 dia"
+                aluno.prazo_restante = "1 day"
             else:
-                aluno.prazo_restante = aluno.prazo_restante + " dias"
+                aluno.prazo_restante = aluno.prazo_restante + " days"
             
         lista_similaridade_jplag = Similaridades.query.filter_by(id_aluno=aluno.id,nome_trabalho=nome_projeto, ferramenta="jplag").all()
         if lista_similaridade_jplag != None:
@@ -501,11 +501,11 @@ def buscaRelatorioProjetosAluno(matricula, turma):
             
             
             if (resultado_nota.prazo_restante == '0'):
-                elemento_result.prazo_restante = "0 dias"
+                elemento_result.prazo_restante = "0 days"
             elif (resultado_nota.prazo_restante == '1'):
-                elemento_result.prazo_restante = "1 dia"
+                elemento_result.prazo_restante = "1 day"
             else:
-                elemento_result.prazo_restante = resultado_nota.prazo_restante + " dias"
+                elemento_result.prazo_restante = resultado_nota.prazo_restante + " days"
 
             lista_similaridade_jplag = Similaridades.query.filter_by(id_aluno=aluno.id,nome_trabalho=resultado_nota.nome_trabalho, ferramenta="jplag").all()
             if lista_similaridade_jplag != None:

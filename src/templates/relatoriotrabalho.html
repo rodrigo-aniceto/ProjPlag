@@ -87,7 +87,7 @@
         xhr.open("GET", "/runmoss?nomeprojeto={{nomeprojeto}}&turma={{turma}}", true);
         //xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send();
-        document.getElementById("rmoss").innerHTML = "Aguarde"
+        document.getElementById("rmoss").innerHTML = "Wait a moment"
         setTimeout(verificarMossPermanente, 5000)
 
 /*      var form = document.createElement('form');
@@ -127,7 +127,7 @@
         xhr.open("GET", "/runjplag?nomeprojeto={{nomeprojeto}}&turma={{turma}}", true);
         //xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send();
-        document.getElementById("rjplag").innerHTML = "Executando...";
+        document.getElementById("rjplag").innerHTML = "Running...";
         setTimeout(verificarJplagPermanente, 20000);
     }
 
