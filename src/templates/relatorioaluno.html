@@ -7,16 +7,16 @@
 {% block content %}
 
 <div class="content" id="conteudo">
-    <h3>Relatório aluno</h3>
+    <h3>Student Report</h3>
 
     <br>
     {% if resultadosprojs|length < 1 and resultadosquests|length < 1 %}
-    <h5> Sem dados aluno {{ matricula }}</h5>
+    <h5> No data available from student {{ matricula }}</h5>
     {% else %}
     <span>{{ nome }} - {{ matricula }}</span>
     <br><br>
     {% if resultadosquests|length >= 1 %}
-    <h5>Questionários</h5>
+    <h5>Quizzes</h5>
     <table class="table">
         <tr>
             {% for resultadoquest in resultadosquests %}
@@ -36,13 +36,13 @@
     <h5>{{ resultadoproj.nome_trabalho }}</h5>
     <table class="table">
         <tr>
-            <th>Nota</th>
-            <th>Suspeita</th>
-            <th>Tempo Utilizado</th>
-            <th>Prazo Restante</th>
-            <th>Resultado Moss</th>
-            <th>Resultado Jplag</th>
-            <th>Código Fonte</th>
+            <th>Grade</th>
+            <th>Suspicion</th>
+            <th>Time spent</th>
+            <th>Deadline left</th>
+            <th>Moss result</th>
+            <th>Jplag result</th>
+            <th>Source code</th>
         </tr>
 
         <tr>
