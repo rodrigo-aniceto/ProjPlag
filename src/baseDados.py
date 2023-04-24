@@ -499,7 +499,6 @@ def buscaRelatorioProjetosAluno(matricula, turma):
             elemento_result.nota = resultado_nota.nota
             elemento_result.tempo_gasto = resultado_nota.tempo_gasto
             
-            
             if (resultado_nota.prazo_restante == '0'):
                 elemento_result.prazo_restante = "0 days"
             elif (resultado_nota.prazo_restante == '1'):
