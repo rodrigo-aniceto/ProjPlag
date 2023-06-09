@@ -1,13 +1,15 @@
-from flask import app
+#from flask import app
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import true
-from app import db
+#from sqlalchemy import true
+#from app import db
 import arquivos
 
 from random import randrange
 from random import randint
 from datetime import datetime
 
+
+db = SQLAlchemy()
 
 #modelo de dados do BD
 class Alunos(db.Model):
@@ -72,8 +74,9 @@ class Questionarios(db.Model):
 
 # usada para criar o banco
 #db.drop_all()
-db.create_all()
-db.session.commit()
+#db.create_all()
+#db.session.commit()
+
 
 
 def inserir_novo_aluno(nome, matricula, turma, grupo):

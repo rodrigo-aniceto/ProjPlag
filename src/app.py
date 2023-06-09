@@ -15,7 +15,7 @@ from decouple import config
 from random import randint
 
 app = Flask(__name__)
-Bootstrap(app) #isso é para colocar extensões tipo o bootstrap
+Bootstrap(app) #colocar extensão  bootstrap
 
 db_connect = config('CONNECT_STRING') #string de conexão privada SQLALCHEMY
 file_upload_key = config('FILE_KEY') #chave secreta usada no upload de arquivos
@@ -25,7 +25,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = file_upload_key
 app.config['UPLOAD_FOLDER'] = '../input'
 
-db = SQLAlchemy(app)
+
+baseDados.db.init_app(app)
 
 class UploadFileForm(FlaskForm):
     file = FileField("File", validators=[InputRequired()])
@@ -288,4 +289,6 @@ def apagar_turma():
 
 
 if __name__ == "__main__":
+    with app.app_context():
+        baseDados.db.create_all()
     app.run(debug=True)
