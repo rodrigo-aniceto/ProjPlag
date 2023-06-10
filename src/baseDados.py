@@ -1,7 +1,4 @@
-#from flask import app
 from flask_sqlalchemy import SQLAlchemy
-#from sqlalchemy import true
-#from app import db
 import arquivos
 
 from random import randrange
@@ -417,7 +414,7 @@ def listarDadosGrafoFerramentas(nome_turma, nome_projeto, ferramenta, percentual
     # 80% - 6
     # 90% - 7
 
-    # primeiro nome e ultimo sobrenome, mátricula, similaridade
+    # primeiro nome e ultimo sobrenome, matricula, similaridade
 
     class elemento():
         nome1 = ""

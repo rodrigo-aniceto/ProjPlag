@@ -1,8 +1,6 @@
 import os
 import re
 
-#TODO avaliar necessidade de verificar se existe uma turma pra um determinado trabalho se isso já for ser validade antes
-
 #caminho ao diretorio de turmas
 def gerarPathTurmas():
     return os.getcwd()+"/../codigosAlunos/"
