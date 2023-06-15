@@ -34,8 +34,8 @@ class UploadFileForm(FlaskForm):
     submit = SubmitField("Upload")
 
 @app.route("/", methods=['GET',"POST"])
-def telaInicial():
-    lista_turmas = baseDados.listarTurmas()
+def tela_inicial():
+    lista_turmas = baseDados.listar_turmas()
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data # coleta do arquivo
@@ -53,7 +53,7 @@ def telaInicial():
 
 #relatoriotrabalho?turma=turmaExemplo&nomeprojeto=projeto1
 @app.route("/relatoriotrabalho")
-def relatoriotrabalho():
+def relatorio_trabalho():
     nome_projeto = request.args.get("nomeprojeto")
     nome_turma = request.args.get("turma")
     if (nome_projeto == None) or (nome_turma == None):
@@ -61,9 +61,9 @@ def relatoriotrabalho():
     
     lista_alunos = []
     mensagem = "the report is unavailable now"
-    if (arquivos.existeTurma(nome_turma) == False):
+    if (arquivos.existe_turma(nome_turma) == False):
         mensagem = "Class not registered"
-    elif (arquivos.existeTrabalhoTurma(nome_projeto, nome_turma) == False):
+    elif (arquivos.existe_trabalho_turma(nome_projeto, nome_turma) == False):
         mensagem = "Project not registered"
     else:
         lista_alunos = baseDados.listar_alunos_trabalho(nome_turma, nome_projeto)
@@ -72,7 +72,7 @@ def relatoriotrabalho():
 
 
 @app.route("/relatorioferramentas")
-def relatorioferramentas():
+def relatorio_ferramentas():
     nome_projeto = request.args.get("nomeprojeto")
     nome_turma = request.args.get("turma")
     if (nome_projeto == None) or (nome_turma == None):
@@ -80,9 +80,9 @@ def relatorioferramentas():
     
     lista_resultados = []
     mensagem = "the report is unavailable now"
-    if (arquivos.existeTurma(nome_turma) == False):
+    if (arquivos.existe_turma(nome_turma) == False):
         mensagem = "Class not registered"
-    elif (arquivos.existeTrabalhoTurma(nome_projeto, nome_turma) == False):
+    elif (arquivos.existe_trabalho_turma(nome_projeto, nome_turma) == False):
         mensagem = "Project not registered"
     else:
         lista_resultados = baseDados.listar_resultados_ferramentas(nome_turma, nome_projeto)
@@ -92,7 +92,7 @@ def relatorioferramentas():
 
 #@app.route("/graforelatorio?turma=<string:turma>&nomeprojeto=<string:nomeprojeto>")
 @app.route("/graforelatorio")
-def graforelatorio():
+def grafo_relatorio():
     
     nomeprojeto = request.args.get("nomeprojeto")
     turma = request.args.get("turma")
@@ -107,14 +107,14 @@ def graforelatorio():
     lista_nos = []
     lista_arestas = []
 
-    if (arquivos.existeTurma(turma) == False):
+    if arquivos.existe_turma(turma) == False:
         mensagem = "Class not registered"
-    elif (arquivos.existeTrabalhoTurma(nomeprojeto, turma) == False):
+    elif arquivos.existe_trabalho_turma(nomeprojeto, turma) == False:
         mensagem = "Project not registered"
     elif ferramenta != "moss" and ferramenta != "jplag":
         mensagem = "Invalid tool"
     else:
-        lista_resultados = baseDados.listarDadosGrafoFerramentas(turma, nomeprojeto, ferramenta, percentual)
+        lista_resultados = baseDados.listar_dados_grafo_ferramentas(turma, nomeprojeto, ferramenta, percentual)
         class nos:
             matricula = ""
             conteudo = ""
@@ -180,20 +180,17 @@ def graforelatorio():
 
     return render_template('graforelatorio.html', mensagem=mensagem, listanos=lista_nos, listaarestas=lista_arestas, nomeprojeto=nomeprojeto, turma=turma, ferramenta=ferramenta, percentual=percentual)
 
-
-
-
 @app.route("/relatorioturma")
-def relatorioturma():
+def relatorio_turma():
     nome_turma = request.args.get("turma")
     mensagem = "Unavailable report"
     lista_resultados_base = []
     lista_trabalhos = []
     lista_questionarios = []
 
-    if (nome_turma == None):
+    if nome_turma == None:
         mensagem = "Incorrect parameters"
-    elif (arquivos.existeTurma(nome_turma) == False):
+    elif arquivos.existe_turma(nome_turma) == False:
         mensagem = "Class not registered"
     else:
         lista_resultados_base, lista_trabalhos, lista_questionarios = baseDados.gera_relatorio_geral(nome_turma)
@@ -202,22 +199,22 @@ def relatorioturma():
 
 
 @app.route("/relatorioaluno")
-def relatorioaluno():
+def relatorio_aluno():
     matricula_aluno = request.args.get("matricula")
     turma = request.args.get("turma")
-    resultado_projs = baseDados.buscaRelatorioProjetosAluno(matricula_aluno, turma)
-    resultado_quests = baseDados.buscaRelatorioQuestionariosAluno(matricula_aluno, turma)
-    nome = baseDados.buscaNomeAluno(matricula_aluno, turma)
+    resultado_projs = baseDados.busca_relatorio_projetos_aluno(matricula_aluno, turma)
+    resultado_quests = baseDados.busca_relatorio_questionarios_aluno(matricula_aluno, turma)
+    nome = baseDados.busca_nome_aluno(matricula_aluno, turma)
     return render_template("relatorioaluno.html", resultadosprojs=resultado_projs, resultadosquests=resultado_quests, matricula=matricula_aluno, nome=nome, turma=turma)
 
 
 @app.route("/codigofonte")
-def codigofonte():
+def codigo_fonte():
     nomeprojeto = request.args.get("nomeprojeto")
     turma = request.args.get("turma")
     arquivo = request.args.get("arquivo")
 
-    return "<pre><code>"+arquivos.lerCodigoTrabalho (arquivo, nomeprojeto, turma)+"</code></pre>"
+    return "<pre><code>"+arquivos.ler_codigo_trabalho (arquivo, nomeprojeto, turma)+ "</code></pre>"
 
 '''
 @app.route("/codigo")
@@ -238,31 +235,31 @@ def codigo():
 
 
 @app.route("/runjplag")
-def runjplag():
+def run_jplag():
     
     nomeprojeto = request.args.get("nomeprojeto")
     turma = request.args.get("turma")
-    ferramentas.executaJplag(nomeprojeto, turma)
+    ferramentas.executa_jplag(nomeprojeto, turma)
 
     return "ok"
 
 @app.route("/verjplag")
-def resultjplag():
+def result_jplag():
 
     nomeprojeto = request.args.get("nomeprojeto")
     turma = request.args.get("turma")
-    result = ferramentas.verificaExecucaoJplag(nomeprojeto, turma)
+    result = ferramentas.verifica_execucao_jplag(nomeprojeto, turma)
 
     return result
 
 
 
 @app.route("/runmoss")
-def runmoss():
+def run_moss():
 
     nomeprojeto = request.args.get("nomeprojeto")
     turma = request.args.get("turma")
-    ferramentas.executaMoss(nomeprojeto, turma)
+    ferramentas.executa_moss(nomeprojeto, turma)
 
     return "ok"
 
@@ -272,7 +269,7 @@ def verifica_moss():
 
     nomeprojeto = request.args.get("nomeprojeto")
     turma = request.args.get("turma")
-    result = ferramentas.verificaExecucaoMoss(nomeprojeto, turma)
+    result = ferramentas.verifica_execucao_moss(nomeprojeto, turma)
 
     return result
 

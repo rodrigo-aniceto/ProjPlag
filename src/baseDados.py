@@ -190,11 +190,11 @@ def listar_alunos_trabalho(nome_turma, nome_projeto):
         else:
             aluno.moss = 0
         
-        aluno.existe_codigo = arquivos.existeArquivoTrabalho(nome_projeto, nome_turma, aluno.matricula+".py")
+        aluno.existe_codigo = arquivos.existe_arquivo_trabalho(nome_projeto, nome_turma, aluno.matricula + ".py")
         if (aluno.existe_codigo):
-            aluno.numero_linhas = arquivos.contaLinhasCodigo(nome_projeto, nome_turma, aluno.matricula+".py")
+            aluno.numero_linhas = arquivos.conta_linhas_codigo(nome_projeto, nome_turma, aluno.matricula + ".py")
 
-        aluno.suspeita = geraSuspeitaPlagio(aluno.moss, aluno.jplag)
+        aluno.suspeita = gera_suspeita_plagio(aluno.moss, aluno.jplag)
     
     db.session.close()
     return lista_alunos
@@ -264,7 +264,7 @@ def listar_resultados_ferramentas(nome_turma, nome_projeto):
     return lista_resultado
         
 
-def listarTurmas():
+def listar_turmas():
     class resultado():
         nome = ""
         projetos = 0
@@ -290,7 +290,7 @@ def listarTurmas():
     db.session.close()
     return lista_resultado
 
-def apagarResultadosFerramenta(nomeTrabalho, nomeTurma, ferramenta):
+def apagar_resultados_ferramenta(nomeTrabalho, nomeTurma, ferramenta):
 
     registro_ferramenta = RegistrosFerramentas.query.filter_by(nome_trabalho=nomeTrabalho,turma=nomeTurma, ferramenta=ferramenta).first()
     if registro_ferramenta != None:
@@ -310,11 +310,11 @@ def apagarResultadosFerramenta(nomeTrabalho, nomeTurma, ferramenta):
         print ("Erro deletar banco de dados - lista similaridade")
 
 
-def apagarTrabalhoTurma(nomeTrabalho, nomeTurma):
+def apagar_trabalho_turma(nomeTrabalho, nomeTurma):
 
     #apagar na tabela similaridade e registros
-    apagarResultadosFerramenta(nomeTrabalho,nomeTurma,"jplag")
-    apagarResultadosFerramenta(nomeTrabalho,nomeTurma,"moss")
+    apagar_resultados_ferramenta(nomeTrabalho, nomeTurma, "jplag")
+    apagar_resultados_ferramenta(nomeTrabalho, nomeTurma, "moss")
     
     #apagar em Projetos, necessario identificar ids dos alunos primeiro
     lista_alunos = Alunos.query.filter_by(turma=nomeTurma).all()
@@ -404,7 +404,7 @@ def listar_resultados_ferramentas_antigo(nome_turma, nome_projeto):
     return lista_resultado
 
 
-def listarDadosGrafoFerramentas(nome_turma, nome_projeto, ferramenta, percentual_minimo): #a principio recebe a ferramenta via parametro
+def listar_dados_grafo_ferramentas(nome_turma, nome_projeto, ferramenta, percentual_minimo): #recebe a ferramenta via parametro
     #para cada dupla de alunos, descobrir a maior similaridade e usar ela (direção da seta)
     # 30% - 1
     # 40% - 2
@@ -453,7 +453,7 @@ def listarDadosGrafoFerramentas(nome_turma, nome_projeto, ferramenta, percentual
     return lista_resultado
 
 
-def insereResultadosBanco(resultados, nomeTrabalho, nomeTurma, ferramenta):
+def insere_resultados_banco(resultados, nomeTrabalho, nomeTurma, ferramenta):
     for resultado in resultados:
         matricula = resultado[0]
         if matricula.endswith(".py"):
@@ -476,7 +476,7 @@ def insereResultadosBanco(resultados, nomeTrabalho, nomeTurma, ferramenta):
                 db.session.close()
     
 
-def buscaRelatorioProjetosAluno(matricula, turma):
+def busca_relatorio_projetos_aluno(matricula, turma):
     result = []
     aluno = Alunos.query.filter_by(turma=turma, matricula=matricula).first()
     class elemento():
@@ -526,18 +526,18 @@ def buscaRelatorioProjetosAluno(matricula, turma):
             else:
                 elemento_result.moss = 0
 
-            elemento_result.suspeita = geraSuspeitaPlagio (elemento_result.moss, elemento_result.jplag)
+            elemento_result.suspeita = gera_suspeita_plagio (elemento_result.moss, elemento_result.jplag)
             
-            elemento_result.existe_codigo = arquivos.existeArquivoTrabalho(resultado_nota.nome_trabalho, turma, matricula+".py")
+            elemento_result.existe_codigo = arquivos.existe_arquivo_trabalho(resultado_nota.nome_trabalho, turma, matricula + ".py")
             if (elemento_result.existe_codigo):
-                elemento_result.numero_linhas = arquivos.contaLinhasCodigo(resultado_nota.nome_trabalho, turma, matricula+".py")
+                elemento_result.numero_linhas = arquivos.conta_linhas_codigo(resultado_nota.nome_trabalho, turma, matricula + ".py")
             result.append(elemento_result)
 
     db.session.close()
     return result
 
 
-def buscaRelatorioQuestionariosAluno(matricula, turma):
+def busca_relatorio_questionarios_aluno(matricula, turma):
     result = []
     aluno = Alunos.query.filter_by(turma=turma, matricula=matricula).first()
     class elemento():
@@ -557,7 +557,6 @@ def buscaRelatorioQuestionariosAluno(matricula, turma):
     return result
 
 def gera_relatorio_geral(turma):
-
     lista_resultado = []
 
     class elemento:
@@ -661,7 +660,7 @@ def gera_relatorio_geral(turma):
                 listJ.append(int(j.percentual))
                 maxJplag = max(listJ)
         
-        aux.suspeita = geraSuspeitaPlagio(maxMoss, maxJplag)
+        aux.suspeita = gera_suspeita_plagio(maxMoss, maxJplag)
 
         lista_resultado.append(aux)
 
@@ -669,7 +668,7 @@ def gera_relatorio_geral(turma):
     return lista_resultado, lista_trabalhos, lista_questionarios
 
 
-def insereRegistroFerrameta(nomeTrabalho, nomeTurma, ferramenta):
+def insere_registro_ferramenta(nomeTrabalho, nomeTurma, ferramenta):
     registro_ferramenta = RegistrosFerramentas.query.filter_by(nome_trabalho=nomeTrabalho,turma=nomeTurma, ferramenta=ferramenta).first()
     if registro_ferramenta != None:
         registro_ferramenta.data_execucao = datetime.now()
@@ -686,12 +685,12 @@ def insereRegistroFerrameta(nomeTrabalho, nomeTurma, ferramenta):
             print ("Erro inserção BD - registro ferramentas")
     db.session.close()
 
-def buscaRegistroFerramenta(nomeTrabalho, nomeTurma, ferramenta):
+def busca_registro_ferramenta(nomeTrabalho, nomeTurma, ferramenta):
     registro_ferramenta = RegistrosFerramentas.query.filter_by(nome_trabalho=nomeTrabalho,turma=nomeTurma, ferramenta=ferramenta).first()
     db.session.close()
     return registro_ferramenta
 
-def buscaNomeAluno(matricula, turma):
+def busca_nome_aluno(matricula, turma):
     aluno = Alunos.query.filter_by(matricula=matricula, turma=turma).first()
     if aluno != None:
         db.session.close()
@@ -701,7 +700,7 @@ def buscaNomeAluno(matricula, turma):
     return
 
 
-def geraSuspeitaPlagio (moss, jplag):
+def gera_suspeita_plagio (moss, jplag):
     suspeita = ""
     if (moss < 20) and (jplag < 50): # caso mais frequente
         suspeita = "0 - Null"

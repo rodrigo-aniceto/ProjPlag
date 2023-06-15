@@ -2,17 +2,17 @@ import os
 import re
 
 #caminho ao diretorio de turmas
-def gerarPathTurmas():
+def gerar_path_turmas():
     return os.getcwd()+"/../codigosAlunos/"
 
 
 #caminho ao diretorio de trabalhos
-def gerarPathTrabalhosTurma(nomeTurma):
+def gerar_path_trabalhos_turma(nomeTurma):
     return os.getcwd()+"/../codigosAlunos/"+nomeTurma+"/"
 
 # verifica se existe uma determinada turma
-def existeTurma (nomeTurma):
-    path = gerarPathTurmas()
+def existe_turma (nomeTurma):
+    path = gerar_path_turmas()
     lista = os.listdir(path)
     for pasta in lista:
         if pasta == nomeTurma:
@@ -20,9 +20,9 @@ def existeTurma (nomeTurma):
     return False
 
 # verifica se existe determinado trabalho em uma turma
-def existeTrabalhoTurma (nomeTrabalho, nomeTurma):
-    if existeTurma(nomeTurma):
-        path = gerarPathTrabalhosTurma(nomeTurma)
+def existe_trabalho_turma (nomeTrabalho, nomeTurma):
+    if existe_turma(nomeTurma):
+        path = gerar_path_trabalhos_turma(nomeTurma)
         lista = os.listdir(path)
         for pasta in lista:
             if pasta == nomeTrabalho:
@@ -30,9 +30,9 @@ def existeTrabalhoTurma (nomeTrabalho, nomeTurma):
     return False
 
 # verifica se existe determinado código em um trabalho e turma
-def existeArquivoTrabalho (nomeTrabalho, nomeTurma, nomeArquivo):
-    if existeTrabalhoTurma(nomeTrabalho, nomeTurma):
-        path = gerarPathTrabalhosTurma(nomeTurma)+nomeTrabalho+"/"
+def existe_arquivo_trabalho (nomeTrabalho, nomeTurma, nomeArquivo):
+    if existe_trabalho_turma(nomeTrabalho, nomeTurma):
+        path = gerar_path_trabalhos_turma(nomeTurma) + nomeTrabalho + "/"
         lista = os.listdir(path)
         for arquivo in lista:
             if arquivo == nomeArquivo:
@@ -44,8 +44,8 @@ def existeArquivoTrabalho (nomeTrabalho, nomeTurma, nomeArquivo):
 
 # cria uma pasta referente a uma nova turma, sucesso: True, se já existir com esse nome: False
 # TODO validar as strings de entrada para não permitir caracteris que não podem ser usados em nome de pasta
-def criarTurma (nome):
-    path = gerarPathTurmas()
+def criar_turma (nome):
+    path = gerar_path_turmas()
     lista = os.listdir(path)
     for pasta in lista:
         if pasta == nome:
@@ -56,11 +56,11 @@ def criarTurma (nome):
     return True
 
 # cria uma pasta referente a um novo trabalho, sucesso: True, se já existir com esse nome ou não existir a turma: False
-def criarTrabalhoTurma (nomeTrabalho, nomeTurma):
-    if existeTurma(nomeTurma) == False:
+def criar_trabalho_turma (nomeTrabalho, nomeTurma):
+    if existe_turma(nomeTurma) == False:
         return False
     
-    path = gerarPathTrabalhosTurma(nomeTurma)
+    path = gerar_path_trabalhos_turma(nomeTurma)
     lista = os.listdir(path)
     for pasta in lista:
         if pasta == nomeTrabalho:
@@ -72,25 +72,25 @@ def criarTrabalhoTurma (nomeTrabalho, nomeTurma):
 
 
 # retorna a lista de pastas referentes a turmas
-def listarTurmas ():
-    path = gerarPathTurmas()
+def listar_turmas ():
+    path = gerar_path_turmas()
     lista = os.listdir(path)
     #print (lista)
     #print (len(lista))
     return lista
 
 # retorna a lista de pastas referentes aos trabalhos
-def listarTrabalhosTurma (nomeTurma):
-    if existeTurma(nomeTurma) == False:
+def listar_trabalhos_turma (nomeTurma):
+    if existe_turma(nomeTurma) == False:
         return []
-    path = gerarPathTrabalhosTurma(nomeTurma)
+    path = gerar_path_trabalhos_turma(nomeTurma)
     lista = os.listdir(path)
     return lista
 
 
 # exclui o diretório de uma turma, sucesso: True, se não existir com esse nome: False
-def apagarTurma (nome):
-    path = gerarPathTurmas()
+def apagar_turma (nome):
+    path = gerar_path_turmas()
     lista = os.listdir(path)
     for pasta in lista:
         if pasta == nome:
@@ -101,10 +101,10 @@ def apagarTurma (nome):
     return False
 
 # exclui o diretório de um trabalho, sucesso: True, se não existir com esse nome, ou não existir a turma: False
-def apagarTrabalhoTurma (nomeTrabalho, nomeTurma):
-    if existeTurma(nomeTurma) == False:
+def apagar_trabalho_turma (nomeTrabalho, nomeTurma):
+    if existe_turma(nomeTurma) == False:
         return False
-    path = gerarPathTrabalhosTurma(nomeTurma)
+    path = gerar_path_trabalhos_turma(nomeTurma)
     lista = os.listdir(path)
     for pasta in lista:
         if pasta == nomeTrabalho:
@@ -115,21 +115,21 @@ def apagarTrabalhoTurma (nomeTrabalho, nomeTurma):
     return False
 
 #retorna uma lista com todos os arquivos dentro de um determinado trabalho
-def listarCodigosTrabalho (nomeTrabalho, nomeTurma):
-    if existeTrabalhoTurma (nomeTrabalho, nomeTurma) == False:
+def listar_codigos_trabalho (nomeTrabalho, nomeTurma):
+    if existe_trabalho_turma (nomeTrabalho, nomeTurma) == False:
         return []
     
-    path = gerarPathTrabalhosTurma(nomeTurma)+nomeTrabalho+"/"
+    path = gerar_path_trabalhos_turma(nomeTurma) + nomeTrabalho + "/"
     lista = os.listdir(path)
     return lista
 
 
 #retorna o conteudo de um determinado arquivo
-def lerCodigoTrabalho (nomeArquivo, nomeTrabalho, nomeTurma):
-    if existeTrabalhoTurma (nomeTrabalho, nomeTurma) == False:
+def ler_codigo_trabalho (nomeArquivo, nomeTrabalho, nomeTurma):
+    if existe_trabalho_turma (nomeTrabalho, nomeTurma) == False:
         return
 
-    path = gerarPathTrabalhosTurma(nomeTurma)+nomeTrabalho+"/"
+    path = gerar_path_trabalhos_turma(nomeTurma) + nomeTrabalho + "/"
     
     arq = open(path+nomeArquivo, 'r')
     conteudo = ""
@@ -143,25 +143,25 @@ def lerCodigoTrabalho (nomeArquivo, nomeTrabalho, nomeTurma):
     return conteudo
 
 #retorna o numero de linhas de código de um trabalho
-def contaLinhasCodigo (nomeTrabalho, nomeTurma, nomeArquivo):
-    path = gerarPathTrabalhosTurma(nomeTurma)+nomeTrabalho+"/"
+def conta_linhas_codigo (nomeTrabalho, nomeTurma, nomeArquivo):
+    path = gerar_path_trabalhos_turma(nomeTurma) + nomeTrabalho + "/"
     arq = open(path+nomeArquivo, 'r')
     num = sum(1 for line in arq)
     arq.close()
     return num
 
-def escreveCodigoTrabalho(nomeArquivo, nomeTrabalho, nomeTurma, conteudo):
-    if existeTrabalhoTurma (nomeTrabalho, nomeTurma) == False:
+def escreve_codigo_trabalho(nomeArquivo, nomeTrabalho, nomeTurma, conteudo):
+    if existe_trabalho_turma (nomeTrabalho, nomeTurma) == False:
         return
 
-    path = gerarPathTrabalhosTurma(nomeTurma)+nomeTrabalho+"/"
+    path = gerar_path_trabalhos_turma(nomeTurma) + nomeTrabalho + "/"
     arq = open(path+nomeArquivo, 'w')
     arq.write(conteudo)
     arq.close()
     return
     
 
-def verificaExistePastaJplag(nomeTrabalho, nomeTurma):
+def verifica_existe_pasta_jplag(nomeTrabalho, nomeTurma):
     path = os.getcwd()+"/../logsferramentas/jplag/"
     lista = os.listdir(path)
     for pasta in lista:
@@ -169,12 +169,12 @@ def verificaExistePastaJplag(nomeTrabalho, nomeTurma):
             return True
     return False
 
-def apagarPastaJplag(nomeTrabalho, nomeTurma):
+def apagar_pasta_jplag(nomeTrabalho, nomeTurma):
     path = os.getcwd()+"/../logsferramentas/jplag/"
     fp = os.popen("rm -rf "+path+nomeTurma+"-"+nomeTrabalho)
     fp.close()
 
-def verificaExisteArquivoMoss(nomeTrabalho, nomeTurma):
+def verifica_existe_arquivo_moss(nomeTrabalho, nomeTurma):
     path = os.getcwd()+"/../logsferramentas/"
     lista = os.listdir(path)
     for arquivo in lista:
@@ -182,12 +182,12 @@ def verificaExisteArquivoMoss(nomeTrabalho, nomeTurma):
             return True
     return False
 
-def apagarArquivoMoss(nomeTrabalho, nomeTurma):
+def apagar_arquivo_moss(nomeTrabalho, nomeTurma):
     path = os.getcwd()+"/../logsferramentas/"
     fp = os.popen("rm -rf "+path+"moss-"+nomeTurma+"-"+nomeTrabalho+".log")
     fp.close()
 
-def coletaDadosExecucaoJplag (nomeTrabalho, nomeTurma):
+def coleta_dados_execucao_jplag (nomeTrabalho, nomeTurma):
     path = os.getcwd()+"/../logsferramentas/jplag/"+nomeTurma+"-"+nomeTrabalho
     lista = os.listdir(path)
     
@@ -217,16 +217,16 @@ if __name__ == "__main__":
     lista = listarTurmas()
     print ("lista de turmas agora:",lista)
     """
-    apagarTurma("2021-2")
-    apagarTurma("2022-1")
-    apagarTurma("2022-2")
-    apagarTurma("2023-1")
-    lista = listarTurmas()
+    apagar_turma("2021-2")
+    apagar_turma("2022-1")
+    apagar_turma("2022-2")
+    apagar_turma("2023-1")
+    lista = listar_turmas()
     """
     print ("lista de turmas agora:",lista)
     """
 
-    lista = listarTurmas()
+    lista = listar_turmas()
     print ("lista de turmas agora:", lista)
     """
     criarTrabalhoTurma("projeto1", "2022-1")
@@ -246,10 +246,10 @@ if __name__ == "__main__":
 
     criarTrabalhoTurma("projeto2", "turmaExemplo")
     """
-    lista = listarTrabalhosTurma("turmaExemplo")
+    lista = listar_trabalhos_turma("turmaExemplo")
     print ("Lista de trabalhos dentro da turma de exemplo:", lista)
 
-    lista = listarCodigosTrabalho("projeto1", "turmaExemplo")
+    lista = listar_codigos_trabalho("projeto1", "turmaExemplo")
     print ("Lista de códigos enviados em projeto1 turmaExemplo:", lista)
 
 

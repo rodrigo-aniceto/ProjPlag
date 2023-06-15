@@ -5,11 +5,11 @@ import urllib.request
 import re
 
 
-def executaMoss(nomeTrabalho, nomeTurma):
-    if arquivos.existeTrabalhoTurma (nomeTrabalho, nomeTurma):
+def executa_moss(nomeTrabalho, nomeTurma):
+    if arquivos.existe_trabalho_turma (nomeTrabalho, nomeTurma):
 
-        if (arquivos.verificaExisteArquivoMoss(nomeTrabalho, nomeTurma)):
-            arquivos.apagarArquivoMoss(nomeTrabalho, nomeTurma)
+        if (arquivos.verifica_existe_arquivo_moss(nomeTrabalho, nomeTurma)):
+            arquivos.apagar_arquivo_moss(nomeTrabalho, nomeTurma)
 
         comando = "../moss/moss -l python ../codigosAlunos/"+nomeTurma+"/"+nomeTrabalho+"/*.py"
         arq = open('../logsferramentas/moss-'+nomeTurma+'-'+nomeTrabalho+'.log', 'w')
@@ -24,16 +24,16 @@ def executaMoss(nomeTrabalho, nomeTurma):
         ultima_linha = arq.readlines()[-1]
 
         if ultima_linha.startswith("http"):
-            listaResult = coletaDadosExecucaoMoss(ultima_linha)
-            resultados = geraListaSimilaridade (listaResult)
-            baseDados.insereResultadosBanco(resultados, nomeTrabalho, nomeTurma, "moss")
-            baseDados.insereRegistroFerrameta(nomeTrabalho,nomeTurma,"moss")
+            listaResult = coleta_dados_execucao_moss(ultima_linha)
+            resultados = gera_lista_similaridade (listaResult)
+            baseDados.insere_resultados_banco(resultados, nomeTrabalho, nomeTurma, "moss")
+            baseDados.insere_registro_ferramenta(nomeTrabalho, nomeTurma, "moss")
             
-        arquivos.apagarArquivoMoss(nomeTrabalho, nomeTurma)
+        arquivos.apagar_arquivo_moss(nomeTrabalho, nomeTurma)
 
-def verificaExecucaoMoss(nomeTrabalho, nomeTurma):
+def verifica_execucao_moss(nomeTrabalho, nomeTurma):
 
-    registro = baseDados.buscaRegistroFerramenta(nomeTrabalho, nomeTurma, "moss")
+    registro = baseDados.busca_registro_ferramenta(nomeTrabalho, nomeTurma, "moss")
     
     path = os.getcwd()+"/../logsferramentas/"
     lista_arquivos = os.listdir(path)
@@ -59,51 +59,51 @@ def verificaExecucaoMoss(nomeTrabalho, nomeTurma):
         return "Moss not executed"
     
 
-def apagaExecucaoMoss(nomeTrabalho, nomeTurma):
-    if arquivos.existeTrabalhoTurma (nomeTrabalho, nomeTurma):
-        if (arquivos.verificaExisteArquivoMoss(nomeTrabalho, nomeTurma)):
-            arquivos.apagarArquivoMoss(nomeTrabalho, nomeTurma)
+def apaga_execucao_moss(nomeTrabalho, nomeTurma):
+    if arquivos.existe_trabalho_turma (nomeTrabalho, nomeTurma):
+        if (arquivos.verifica_existe_arquivo_moss(nomeTrabalho, nomeTurma)):
+            arquivos.apagar_arquivo_moss(nomeTrabalho, nomeTurma)
 
-        baseDados.apagarResultadosFerramenta(nomeTrabalho, nomeTurma, "moss")
-
-
-def apagaExecucaoJplag(nomeTrabalho, nomeTurma):
-    if arquivos.existeTrabalhoTurma (nomeTrabalho, nomeTurma):
-        if (arquivos.verificaExistePastaJplag(nomeTrabalho, nomeTurma)):
-            arquivos.apagarPastaJplag(nomeTrabalho, nomeTurma)
-
-        baseDados.apagarResultadosFerramenta(nomeTrabalho, nomeTurma, "jplag")
+        baseDados.apagar_resultados_ferramenta(nomeTrabalho, nomeTurma, "moss")
 
 
+def apaga_execucao_jplag(nomeTrabalho, nomeTurma):
+    if arquivos.existe_trabalho_turma (nomeTrabalho, nomeTurma):
+        if (arquivos.verifica_existe_pasta_jplag(nomeTrabalho, nomeTurma)):
+            arquivos.apagar_pasta_jplag(nomeTrabalho, nomeTurma)
+
+        baseDados.apagar_resultados_ferramenta(nomeTrabalho, nomeTurma, "jplag")
 
 
-def executaJplag(nomeTrabalho, nomeTurma):
-    if arquivos.existeTrabalhoTurma (nomeTrabalho, nomeTurma):
+
+
+def executa_jplag(nomeTrabalho, nomeTurma):
+    if arquivos.existe_trabalho_turma (nomeTrabalho, nomeTurma):
 
         comando = "java -jar ../jplag/jplag-2.12.1-SNAPSHOT-jar-with-dependencies.jar -l python3 -s ../codigosAlunos/"+nomeTurma+"/"+nomeTrabalho+"/ -m 20\% -r ../logsferramentas/jplag/"+nomeTurma+"-"+nomeTrabalho+"/"
 
         # verifica se já existe pasta
-        if (arquivos.verificaExistePastaJplag(nomeTrabalho, nomeTurma)):
-            arquivos.apagarPastaJplag(nomeTrabalho, nomeTurma)
+        if (arquivos.verifica_existe_pasta_jplag(nomeTrabalho, nomeTurma)):
+            arquivos.apagar_pasta_jplag(nomeTrabalho, nomeTurma)
         # se já existir apagar pasta
 
         fp = os.popen(comando)
         fp.close()
         
         #lê os dados ferramenta
-        listaResult = arquivos.coletaDadosExecucaoJplag(nomeTrabalho, nomeTurma)
-        resultados = geraListaSimilaridade (listaResult)
+        listaResult = arquivos.coleta_dados_execucao_jplag(nomeTrabalho, nomeTurma)
+        resultados = gera_lista_similaridade (listaResult)
         #insere no banco
-        baseDados.insereResultadosBanco(resultados, nomeTrabalho, nomeTurma, "jplag")
-        baseDados.insereRegistroFerrameta(nomeTrabalho,nomeTurma,"jplag")
+        baseDados.insere_resultados_banco(resultados, nomeTrabalho, nomeTurma, "jplag")
+        baseDados.insere_registro_ferramenta(nomeTrabalho, nomeTurma, "jplag")
         #arquivos.apagarPastaJplag(nomeTrabalho, nomeTurma)
 
 
 
 
-def verificaExecucaoJplag(nomeTrabalho, nomeTurma):
+def verifica_execucao_jplag(nomeTrabalho, nomeTurma):
 
-    registro = baseDados.buscaRegistroFerramenta(nomeTrabalho, nomeTurma, "jplag")
+    registro = baseDados.busca_registro_ferramenta(nomeTrabalho, nomeTurma, "jplag")
     if registro != None:
         return "Last run of Jplag: "+ registro.data_execucao.strftime("%d/%m/%Y, %H:%M:%S")
     else:
@@ -122,7 +122,7 @@ def verificaExecucaoJplag(nomeTrabalho, nomeTurma):
 '''
 
 
-def geraListaSimilaridade (listaResult):
+def gera_lista_similaridade (listaResult):
     
     listaResumida = []
     
@@ -186,7 +186,7 @@ def geraListaSimilaridade (listaResult):
     return listaResumida
 
 
-def coletaDadosExecucaoMoss (url):
+def coleta_dados_execucao_moss (url):
     try:
         response =  urllib.request.urlopen(url)
         html = response.read().decode('utf-8')
