@@ -24,8 +24,8 @@ def executa_moss(nomeTrabalho, nomeTurma):
         ultima_linha = arq.readlines()[-1]
 
         if ultima_linha.startswith("http"):
-            listaResult = coleta_dados_execucao_moss(ultima_linha)
-            resultados = gera_lista_similaridade (listaResult)
+            lista_result = coleta_dados_execucao_moss(ultima_linha)
+            resultados = gera_lista_similaridade (lista_result)
             baseDados.insere_resultados_banco(resultados, nomeTrabalho, nomeTurma, "moss")
             baseDados.insere_registro_ferramenta(nomeTrabalho, nomeTurma, "moss")
             
@@ -91,8 +91,8 @@ def executa_jplag(nomeTrabalho, nomeTurma):
         fp.close()
         
         #lê os dados ferramenta
-        listaResult = arquivos.coleta_dados_execucao_jplag(nomeTrabalho, nomeTurma)
-        resultados = gera_lista_similaridade (listaResult)
+        lista_result = arquivos.coleta_dados_execucao_jplag(nomeTrabalho, nomeTurma)
+        resultados = gera_lista_similaridade (lista_result)
         #insere no banco
         baseDados.insere_resultados_banco(resultados, nomeTrabalho, nomeTurma, "jplag")
         baseDados.insere_registro_ferramenta(nomeTrabalho, nomeTurma, "jplag")
@@ -124,7 +124,7 @@ def verifica_execucao_jplag(nomeTrabalho, nomeTurma):
 
 def gera_lista_similaridade (listaResult):
     
-    listaResumida = []
+    lista_resumida = []
     
     
     # lista todos os resultados
@@ -135,12 +135,12 @@ def gera_lista_similaridade (listaResult):
         aux.append(elemento[1].split('%',1)[0].split('.',1)[0])
         aux.append(elemento[2].split('.',1)[0])
 
-        listaResumida.append(aux)
+        lista_resumida.append(aux)
         aux = []
         aux.append(elemento[2].split('.',1)[0])
         aux.append(elemento[3].split('%',1)[0].split('.',1)[0])
         aux.append(elemento[0].split('.',1)[0])
-        listaResumida.append(aux)
+        lista_resumida.append(aux)
     
     """
     #lista resultado o maior de cada aluno
@@ -183,7 +183,7 @@ def gera_lista_similaridade (listaResult):
             listaResumida.append(aux)
     """
 
-    return listaResumida
+    return lista_resumida
 
 
 def coleta_dados_execucao_moss (url):
@@ -195,7 +195,7 @@ def coleta_dados_execucao_moss (url):
 
     lista = html.split("\n")
     i = 1
-    listaResultMoss = []
+    lista_result_moss = []
     aux = []
 
     for line in lista:
@@ -208,11 +208,11 @@ def coleta_dados_execucao_moss (url):
                 aux = aux + re.findall(r'\d+.py|\d+%', line)
             else:
                 aux = aux + re.findall(r'\d+.py|\d+%', line)
-                listaResultMoss.append(aux)
+                lista_result_moss.append(aux)
 
             i = i + 1
     
-    return listaResultMoss
+    return lista_result_moss
 
 
 # comando execução moss:

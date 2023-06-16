@@ -647,20 +647,20 @@ def gera_relatorio_geral(turma):
 
         listM = []
         listJ = []
-        maxMoss = 0
-        maxJplag = 0
+        max_moss = 0
+        max_jplag = 0
         
         if moss != None:
             for m in moss:
                 listM.append(int(m.percentual))
-                maxMoss = max(listM)
+                max_moss = max(listM)
         
         if jplag != None:
             for j in jplag:
                 listJ.append(int(j.percentual))
-                maxJplag = max(listJ)
+                max_jplag = max(listJ)
         
-        aux.suspeita = gera_suspeita_plagio(maxMoss, maxJplag)
+        aux.suspeita = gera_suspeita_plagio(max_moss, max_jplag)
 
         lista_resultado.append(aux)
 
@@ -709,7 +709,7 @@ def gera_suspeita_plagio (moss, jplag):
         suspeita = "3 - High"
     elif (moss >= 30) or (jplag >= 60):
         suspeita = "2 - Medium"
-    else: # (moss >= 20) or (jplag >= 50):
+    else:# (moss >= 20) or (jplag >= 50):
         suspeita = "1 - Low"
 
     return suspeita

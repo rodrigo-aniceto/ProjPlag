@@ -55,7 +55,7 @@ def converte_data(data):
 def inserir_planilha_projeto(turma, nome_arquivo, data_final, trabalho):
 
     data_final = converte_data(data_final)
-    print ("data final: "+data_final)
+    print("data final: "+data_final)
 
     arquivos.criar_turma (turma)
     arquivos.criar_trabalho_turma(trabalho, turma)

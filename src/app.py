@@ -126,12 +126,12 @@ def grafo_relatorio():
         
         for elemento in lista_resultados:
     
-            jaExiste = False
+            ja_existe = False
             for item in lista_nos:
                 if item.matricula == elemento.matricula1:
-                    jaExiste = True
+                    ja_existe = True
                     break
-            if jaExiste == False:
+            if ja_existe == False:
                 novo_no = nos()
                 novo_no.matricula = elemento.matricula1
                 #deixar só primeiro, ultimo nome e matricula
@@ -139,12 +139,12 @@ def grafo_relatorio():
                 lista_nos.append(novo_no)
 
             #mesmo para o item da direita
-            jaExiste = False
+            ja_existe = False
             for item in lista_nos:
                 if item.matricula == elemento.matricula2:
-                    jaExiste = True
+                    ja_existe = True
                     break
-            if jaExiste == False:
+            if ja_existe == False:
                 novo_no = nos()
                 novo_no.matricula = elemento.matricula2
                 novo_no.conteudo = elemento.nome2.split(' ',1)[0] + ' ' + elemento.nome2.rsplit(' ',1)[-1] + '\n' + elemento.matricula2
