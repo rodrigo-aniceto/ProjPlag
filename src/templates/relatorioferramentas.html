@@ -54,14 +54,14 @@
             <tr class="active">
                 <th class="table-success">Registration</th>
                 <th class="table-success">Name</th>
-                <th class="table-success">Group</th>
+                <!-- <th class="table-success">Group</th> -->
                 <th class="table-success">Grade</th>
                 <th class="table-success">Moss</th>
                 <th class="table-success">Jplag</th>
                 <th class="table-info">Jplag</th>
                 <th class="table-info">Moss</th>
                 <th class="table-info">Grade</th>
-                <th class="table-info">Group</th>
+                <!-- <th class="table-info">Group</th> -->
                 <th class="table-info">Name</th>
                 <th class="table-info">Registration</th>
             </tr>
@@ -72,14 +72,14 @@
             <tr>
                 <th>{{ elemento.matricula1 }}</th>
                 <th>{{ elemento.nome1 }}</th>
-                <th>{{ elemento.grupo1 }}</th>
+                <!-- <th>{{ elemento.grupo1 }}</th> -->
                 {% if (elemento.nota1 != None) %} <th> {{ elemento.nota1 }}</th> {% else %} <th>-</th> {% endif %} 
                 <th>{{ elemento.moss1 }}%</th>
                 <th>{{ elemento.jplag1 }}%</th>
                 <th>{{ elemento.jplag2 }}%</th>
                 <th>{{ elemento.moss2 }}%</th>
                 {% if (elemento.nota2 != None) %} <th> {{ elemento.nota2 }}</th> {% else %} <th>-</th> {% endif %} 
-                <th>{{ elemento.grupo2 }}</th>
+                <!-- <th>{{ elemento.grupo2 }}</th>-->
                 <th>{{ elemento.nome2 }}</th>
                 <th>{{ elemento.matricula2 }}</th>
             </tr>

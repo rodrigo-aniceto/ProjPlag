@@ -37,7 +37,7 @@
             <tr class="active">
                 <th class="table-active">Student registration</th>
                 <th class="table-active">Name</th>
-                <th class="table-active">Group</th>
+                <!-- <th class="table-active">Group</th> -->
                 <th class="table-active">Suspicion</th>
                 {% for questionario in listaquestionarios %}   
                 <th class="table-info itemQuestionario">{{ questionario }} Grade</th>
@@ -52,7 +52,7 @@
             <tr> 
                 <th><a href="/relatorioaluno?matricula={{elemento.matricula}}&turma={{turma}}">{{ elemento.matricula }}</a></th>
                 <th>{{ elemento.nome_aluno }}</th>
-                <th>{{ elemento.grupo }}</th>
+                <!-- <th>{{ elemento.grupo }}</th> -->
                 <th>{{ elemento.suspeita }}</th>
                 {% for i in range(tamanholistaquestionarios) %}    
                 <th class="itemQuestionario" >{{ elemento.notas_questionarios[i] }}</th>
