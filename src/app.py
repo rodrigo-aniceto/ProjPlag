@@ -6,10 +6,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import FileField, StringField, SubmitField, SelectField, DateField
 from werkzeug.utils import secure_filename
-from wtforms.validators import InputRequired
+from wtforms.validators import InputRequired, Optional
 import arquivos
 import baseDados
 import ferramentas
+import input
 from decouple import config
 
 from random import randint
@@ -33,7 +34,7 @@ class UploadFileForm(FlaskForm):
     turma = StringField("Nome da Turma (ex: 2021-1):", validators=[InputRequired()])
     tarefa = StringField("Nome da Tarefa (ex: projeto1):", validators=[InputRequired()])
     tipo_tarefa = SelectField('Tipo da tarefa', id='tipotarefa', choices=[('projeto', 'Projeto'), ('questionario', 'Questionário')], validators=[InputRequired()])
-    date = DateField('Data', format='%Y-%m-%d', validators=[InputRequired()])
+    data_limite = DateField('Data limite para entrega', format='%Y-%m-%d', validators=[Optional()])
     submit = SubmitField("Upload")
 
 @app.route("/", methods=['GET',"POST"])
@@ -45,9 +46,19 @@ def tela_inicial():
         nome_turma = form.turma.data
         nome_tarefa = form.tarefa.data
         tipo_tarefa = form.tipo_tarefa.data
-        print ("nome turma:", nome_turma, "nome tarefa:", nome_tarefa, "tipo_tarefa:", tipo_tarefa)
+        data_limite = form.data_limite.data
+        if tipo_tarefa == "projeto" and data_limite == None:
+            return render_template('index.html', listaturmas=lista_turmas,form=form, mensagem="Favor preencher a data limite")
+
+        print ("nome turma:", nome_turma, "nome tarefa:", nome_tarefa, "tipo_tarefa:", tipo_tarefa, "data limite:", data_limite)
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Salvar o arquivo
-        print ("nome arquivos: "+ file.filename+" nome turma: "+request.form['turma'])
+        nome_arquivo = file.filename.replace(" ", "_")
+        if tipo_tarefa == "projeto":
+            input.inserir_planilha_projeto(nome_turma, nome_arquivo, data_limite.strftime('%d/%m/%Y'), nome_tarefa)
+        else:
+            input.inserir_planilha_questionario(nome_turma, nome_arquivo, nome_tarefa)
+
+        lista_turmas = baseDados.listar_turmas()
         return render_template('index.html', listaturmas=lista_turmas,form=form, mensagem="Arquivo submetido com sucesso")
 
     return render_template('index.html', listaturmas=lista_turmas,form=form, mensagem="")

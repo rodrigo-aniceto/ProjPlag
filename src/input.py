@@ -52,17 +52,25 @@ def converte_data(data):
     data = dia+"/"+mes+"/"+ano
     return data
 
+def converte_data_form(data):
+    dia = data[8:10]
+    mes = data[5:7]
+    ano = data[0:4]
+
+    data = dia+"/"+mes+"/"+ano
+    return data
+
 def inserir_planilha_projeto(turma, nome_arquivo, data_final, trabalho):
 
-    data_final = converte_data(data_final)
-    print("data final: "+data_final)
+    #data_final = converte_data_form(data_final)
+    #print("data final: "+data_final)
 
     arquivos.criar_turma (turma)
     arquivos.criar_trabalho_turma(trabalho, turma)
 
     df = pd.read_csv("../input/"+nome_arquivo)
 
-    print(len(df.index))
+    #print(len(df.index))
 
     for i in range(0,len(df.index)):
         #print('Nome: ' + df['Nome'][i])
@@ -85,7 +93,7 @@ def inserir_planilha_projeto(turma, nome_arquivo, data_final, trabalho):
         prazo_restante = calcula_diferenca_data(data_entregue, data_final)
         #print ("Prazo restante: "+str(prazo_restante)+ " e tempo usado: "+tempo_gasto)
 
-        print (nome+" - "+matricula+ " nota: "+nota+" tempo gasto: "+tempo_gasto+" prazo restante: "+str(prazo_restante))
+        #print (nome+" - "+matricula+ " nota: "+nota+" tempo gasto: "+tempo_gasto+" prazo restante: "+str(prazo_restante))
         if matricula.isnumeric() == True: # evitar matriculas falsas
             baseDados.inserir_novo_aluno(nome, matricula, turma, "")
             baseDados.inserir_nova_nota_projeto(matricula, nota, turma, trabalho, tempo_gasto, prazo_restante)
@@ -98,7 +106,7 @@ def inserir_planilha_questionario(turma, nome_arquivo, questionario):
 
     df = pd.read_csv("../input/"+nome_arquivo)
 
-    print(len(df.index))
+    #print(len(df.index))
 
     for i in range(0,len(df.index)-1):
 
@@ -106,7 +114,7 @@ def inserir_planilha_questionario(turma, nome_arquivo, questionario):
         matricula = df['Endereço de email'][i].split('@',1)[0]
         nota = df['Avaliar/10,00'][i].replace(',','.')
 
-        print ("nome: "+nome+" matricula: "+matricula+" nota: "+nota)
+        #print ("nome: "+nome+" matricula: "+matricula+" nota: "+nota)
 
         baseDados.inserir_novo_aluno(nome, matricula, turma, "")
         baseDados.inserir_nova_nota_questionario(matricula, nota, turma, questionario)

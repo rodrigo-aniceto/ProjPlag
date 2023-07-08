@@ -79,7 +79,7 @@ class Questionarios(db.Model):
 def inserir_novo_aluno(nome, matricula, turma, grupo):
     aluno = Alunos.query.filter_by(nome=nome, matricula=matricula, turma=turma).first()
     if aluno != None:
-        print("aluno já existe")
+        #print("aluno já existe")
         db.session.close()
         return 1
     
