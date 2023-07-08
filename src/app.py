@@ -52,7 +52,7 @@ def tela_inicial():
 
         print ("nome turma:", nome_turma, "nome tarefa:", nome_tarefa, "tipo_tarefa:", tipo_tarefa, "data limite:", data_limite)
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Salvar o arquivo
-        nome_arquivo = file.filename.replace(" ", "_")
+        nome_arquivo = input.ajustar_nome(file.filename)
         if tipo_tarefa == "projeto":
             input.inserir_planilha_projeto(nome_turma, nome_arquivo, data_limite.strftime('%d/%m/%Y'), nome_tarefa)
         else:

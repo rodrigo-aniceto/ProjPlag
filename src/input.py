@@ -60,6 +60,17 @@ def converte_data_form(data):
     data = dia+"/"+mes+"/"+ano
     return data
 
+def ajustar_nome(nome_arquivo):
+    nome_arquivo = nome_arquivo.replace(" ", "_")
+    nome_arquivo = nome_arquivo.replace("á", "a")
+    nome_arquivo = nome_arquivo.replace("ó", "o")
+    nome_arquivo = nome_arquivo.replace("ç", "c")
+    nome_arquivo = nome_arquivo.replace("ã", "a")
+    nome_arquivo = nome_arquivo.replace("õ", "o")
+    nome_arquivo = nome_arquivo.replace("[", "")
+    nome_arquivo = nome_arquivo.replace("]", "")
+    return nome_arquivo
+
 def inserir_planilha_projeto(turma, nome_arquivo, data_final, trabalho):
 
     #data_final = converte_data_form(data_final)
