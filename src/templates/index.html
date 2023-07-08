@@ -39,12 +39,13 @@
     <div id="formnovaturma" style="display:none; min-width: 300px;" class="border">
     
         <form action="/" method='POST' enctype='multipart/form-data'>
-            
-            <label for="nometurma">Class name:</label><br>
-            <input type="text" id="nometurma" name="nometurma"><br><br>
-            {{form.hidden_tag()}}
-            {{form.file()}}<br><br>
-            {{form.submit()}}
+            {{ form.csrf_token }}<br>
+            {{ form.turma.label }}<br>{{ form.turma() }}<br><br>
+            {{ form.tarefa.label }}<br>{{ form.tarefa() }}<br><br>
+            {{ form.tipo_tarefa.label }}<br>{{ form.tipo_tarefa() }}<br><br>
+            <span id="datalimite">{{ form.date.label }}<br>{{ form.date() }}<br><br></span>
+            {{ form.file.label }}<br>{{ form.file() }}<br><br>
+            {{ form.submit() }}
         </form>
     </div>
     <br>
@@ -59,6 +60,20 @@
         document.getElementById("formnovaturma").style.display = "";
         document.getElementById("botaoturma").style.display = "none";
     }
+
+    function toggleDateField() {
+        var selectValue = document.getElementById("tipotarefa").value;
+        var dateField = document.getElementById("datalimite");
+
+        if (selectValue === "projeto") {
+            dateField.style.display = "block";
+        } else {
+            dateField.style.display = "none";
+        }
+    }
+
+    document.getElementById("tipotarefa").addEventListener("change", toggleDateField);
+    toggleDateField();
 </script>
 
 {% endblock %}

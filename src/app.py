@@ -4,7 +4,7 @@ from flask import Flask, request, render_template
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import FileField, StringField, SubmitField
+from wtforms import FileField, StringField, SubmitField, SelectField, DateField
 from werkzeug.utils import secure_filename
 from wtforms.validators import InputRequired
 import arquivos
@@ -29,8 +29,11 @@ app.config['UPLOAD_FOLDER'] = '../input'
 baseDados.db.init_app(app)
 
 class UploadFileForm(FlaskForm):
-    file = FileField("File", validators=[InputRequired()])
-    turma = StringField("Turma", validators=[InputRequired()])
+    file = FileField("Arquivo", validators=[InputRequired()])
+    turma = StringField("Nome da Turma (ex: 2021-1):", validators=[InputRequired()])
+    tarefa = StringField("Nome da Tarefa (ex: projeto1):", validators=[InputRequired()])
+    tipo_tarefa = SelectField('Tipo da tarefa', id='tipotarefa', choices=[('projeto', 'Projeto'), ('questionario', 'Questionário')], validators=[InputRequired()])
+    date = DateField('Data', format='%Y-%m-%d', validators=[InputRequired()])
     submit = SubmitField("Upload")
 
 @app.route("/", methods=['GET',"POST"])
@@ -40,12 +43,11 @@ def tela_inicial():
     if form.validate_on_submit():
         file = form.file.data # coleta do arquivo
         nome_turma = form.turma.data
-        return ("file name: "+ file.filename+" class name: "+nome_turma)
-        if nome_turma == "":
-            return render_template('index.html', listaturmas=lista_turmas,form=form, mensagem="Favor informar nome turma")
-        else:
-            file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Salvar o arquivo
-            return ("nome arquivos: "+ file.filename+" nome turma: "+request.form['nometurma'])
+        nome_tarefa = form.tarefa.data
+        tipo_tarefa = form.tipo_tarefa.data
+        print ("nome turma:", nome_turma, "nome tarefa:", nome_tarefa, "tipo_tarefa:", tipo_tarefa)
+        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Salvar o arquivo
+        print ("nome arquivos: "+ file.filename+" nome turma: "+request.form['turma'])
         return render_template('index.html', listaturmas=lista_turmas,form=form, mensagem="Arquivo submetido com sucesso")
 
     return render_template('index.html', listaturmas=lista_turmas,form=form, mensagem="")
