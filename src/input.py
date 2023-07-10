@@ -2,6 +2,7 @@ import pandas as pd
 import baseDados
 import arquivos
 import ferramentas
+import os
 from datetime import date
 
 
@@ -110,6 +111,10 @@ def inserir_planilha_projeto(turma, nome_arquivo, data_final, trabalho):
             baseDados.inserir_nova_nota_projeto(matricula, nota, turma, trabalho, tempo_gasto, prazo_restante)
 
             arquivos.escreve_codigo_trabalho(matricula + ".py", trabalho, turma, df['Resposta 1'][i])
+        
+    path = os.getcwd()+"/../input/"
+    fp = os.popen("rm -rf " + path + nome_arquivo)
+    fp.close()
 
 
 
@@ -129,3 +134,7 @@ def inserir_planilha_questionario(turma, nome_arquivo, questionario):
 
         baseDados.inserir_novo_aluno(nome, matricula, turma, "")
         baseDados.inserir_nova_nota_questionario(matricula, nota, turma, questionario)
+
+    path = os.getcwd()+"/../input/"
+    fp = os.popen("rm -rf " + path + nome_arquivo)
+    fp.close()
