@@ -105,7 +105,6 @@ def inserir_planilha_projeto(turma, nome_arquivo, data_final, trabalho):
         prazo_restante = calcula_diferenca_data(data_entregue, data_final)
         #print ("Prazo restante: "+str(prazo_restante)+ " e tempo usado: "+tempo_gasto)
 
-        #print (nome+" - "+matricula+ " nota: "+nota+" tempo gasto: "+tempo_gasto+" prazo restante: "+str(prazo_restante))
         if matricula.isnumeric() == True: # evitar matriculas falsas
             baseDados.inserir_novo_aluno(nome, matricula, turma, "")
             baseDados.inserir_nova_nota_projeto(matricula, nota, turma, trabalho, tempo_gasto, prazo_restante)

@@ -29,7 +29,7 @@ class Projetos(db.Model):
     nome_trabalho = db.Column(db.String(10), nullable=False)
     nota = db.Column(db.String(5))
     tempo_gasto = db.Column(db.String(25))
-    prazo_restante = db.Column(db.String(2))
+    prazo_restante = db.Column(db.String(4))
     id_aluno = db.Column(db.Integer, db.ForeignKey("alunos.id"))
 
     def __repr__(self):
@@ -107,6 +107,7 @@ def inserir_nova_nota_projeto(matricula, nota, turma, nome_trabalho, tempo_gasto
             try:
                 db.session.commit()
             except:
+                print("exceção atualizar nota aluno")
                 return 1
             finally:
                 db.session.close()
@@ -117,6 +118,7 @@ def inserir_nova_nota_projeto(matricula, nota, turma, nome_trabalho, tempo_gasto
                 db.session.add(nova_nota)
                 db.session.commit()
             except:
+                print("exceção adicionar nota aluno")
                 return 1
             finally:
                 db.session.close()

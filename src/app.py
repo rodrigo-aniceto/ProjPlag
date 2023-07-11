@@ -50,7 +50,7 @@ def tela_inicial():
         if tipo_tarefa == "projeto" and data_limite == None:
             return render_template('index.html', listaturmas=lista_turmas,form=form, mensagem="Favor preencher a data limite")
 
-        print ("nome turma:", nome_turma, "nome tarefa:", nome_tarefa, "tipo_tarefa:", tipo_tarefa, "data limite:", data_limite)
+        #print ("nome turma:", nome_turma, "nome tarefa:", nome_tarefa, "tipo_tarefa:", tipo_tarefa, "data limite:", data_limite)
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Salvar o arquivo
         nome_arquivo = input.ajustar_nome(file.filename)
         if tipo_tarefa == "projeto":
