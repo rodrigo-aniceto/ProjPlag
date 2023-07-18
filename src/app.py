@@ -37,6 +37,7 @@ class UploadFileForm(FlaskForm):
     data_limite = DateField('Data limite para entrega', format='%Y-%m-%d', validators=[Optional()])
     submit = SubmitField("Upload")
 
+# TODO: função de deletar
 @app.route("/", methods=['GET',"POST"])
 def tela_inicial():
     lista_turmas = baseDados.listar_turmas()

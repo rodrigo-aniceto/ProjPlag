@@ -643,7 +643,7 @@ def gera_relatorio_geral(turma):
                     aux.similaridade_jplag[-1] = similaridade.percentual
             '''
         
-
+        # TODO: a suspeita de plágio deve ser a maior entre os projetos, não uma combinação entre eles
         moss = Similaridades.query.filter_by(id_aluno=aluno.id, ferramenta="moss").all()
         jplag = Similaridades.query.filter_by(id_aluno=aluno.id, ferramenta="jplag").all()
 
