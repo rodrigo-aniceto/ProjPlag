@@ -76,6 +76,8 @@ def inserir_planilha_projeto(turma, nome_arquivo, data_final, trabalho):
 
     #data_final = converte_data_form(data_final)
     #print("data final: "+data_final)
+    turma = turma.replace(" ", "_")
+    trabalho = trabalho.replace(" ", "_")
 
     arquivos.criar_turma (turma)
     arquivos.criar_trabalho_turma(trabalho, turma)
@@ -118,6 +120,9 @@ def inserir_planilha_projeto(turma, nome_arquivo, data_final, trabalho):
 
 
 def inserir_planilha_questionario(turma, nome_arquivo, questionario):
+
+    turma = turma.replace(" ", "_")
+    questionario = questionario.replace(" ", "_")
 
     df = pd.read_csv("../input/"+nome_arquivo)
 
